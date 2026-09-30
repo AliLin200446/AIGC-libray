@@ -1,0 +1,33 @@
+{
+  "name": "visual-control-library",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader runner --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "tsx --test src/controls/catalog.test.ts src/experiments/studies/studies.test.ts src/library/instrument/camera.test.ts src/library/reference/reference.test.ts server/reference.test.ts server/evaluation/evaluation.test.ts server/site.test.ts",
+    "build": "npm run typecheck && vite build --configLoader runner && tsx scripts/prepare-release.ts && node scripts/check-production.mjs",
+    "preview": "vite preview --configLoader runner --host 127.0.0.1",
+    "start": "tsx server/main.ts",
+    "reference-eval": "tsx server/evaluation/cli.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.2",
+    "@types/three": "^0.186.0",
+    "eslint": "^10.11.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.70.1",
+    "vite": "^8.3.0"
+  },
+  "dependencies": {
+    "sharp": "^0.35.4",
+    "three": "^0.186.0",
+    "tsx": "^4.23.15"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}

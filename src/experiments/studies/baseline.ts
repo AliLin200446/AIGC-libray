@@ -1,0 +1,43 @@
+import type { BaselineSpecification } from './types';
+
+export const baseline: BaselineSpecification = {
+  baselineId: 'baseline_scene_v01', status: 'specified', referenceAssets: [],
+  scene: 'A quiet pale limestone courtyard, one adult woman standing neutrally on the central architectural axis. A low foreground stone plinth and paving joints establish depth. Paired columns and a recessed doorway establish the background. One small left-side wall recess breaks fine-detail symmetry; the right wall remains quiet. Neutral editorial daylight, natural skin and visible textile weave.',
+  coordinateSystem: 'Meters; x is camera-right, y points from baseline camera into the scene, z is up. Subject feet are the origin. Coordinates are production targets, not claims about generated geometry.',
+  landmarks: [
+    { id: 'subject', description: 'One 1.72m adult woman; feet fixed, body faces baseline camera.', positionMeters: [0, 0, 0] },
+    { id: 'camera-start', description: 'Level camera aiming along +y, roll zero.', positionMeters: [0, -6, 0.86] },
+    { id: 'foreground-plinth', description: 'Low rectangular limestone plinth; track its top-right corner. No text or ornaments.', positionMeters: [-0.55, -1.5, 0.35] },
+    { id: 'left-column', description: 'Left paired column, vertical edges visible.', positionMeters: [-2.3, 5, 0] },
+    { id: 'right-column', description: 'Right paired column, same dimensions.', positionMeters: [2.3, 5, 0] },
+    { id: 'doorway', description: 'Recessed centered doorway and lintel; no signage.', positionMeters: [0, 7, 0] },
+    { id: 'left-recess', description: 'Small distinct wall recess; must not be copied to the right.', positionMeters: [-3, 6, 1.4] },
+  ],
+  locks: {
+    'subject.identity': 'Same adult woman, short dark bob, brown eyes, oval face, small mole on left cheek. Approve one reference identity; text traits alone do not lock identity.',
+    'subject.wardrobe': 'Matte slate-blue crew-neck top, straight charcoal trousers, plain dark flat shoes; no loose layers, patterns, jewelry or logos.',
+    'subject.pose': 'Full body, feet hip-width, arms relaxed, hands open without an interaction, head and torso facing the original camera location. No walking, turning or compensatory gaze tracking.',
+    'environment.geometry': 'Same courtyard, column spacing, doorway, paving lines, wall dimensions and landmark world positions.',
+    'environment.objects': 'One subject, one foreground plinth, paired columns, centered doorway and left-only recess. Right wall is quiet; no extra objects.',
+    'environment.time': '10:00 AM in the same fixed scene setup; no moving sun, clouds or weather.',
+    'light.direction': 'Broad daylight from high camera-left/front, fixed in world coordinates.',
+    'light.quality': 'Soft natural daylight, modest shadow definition, no dramatic rim light, haze or artificial glow.',
+    'light.exposure': 'Manual baseline exposure and neutral white balance; preserve tone mapping. Record actual shutter/ISO/WB if exposed by the tool. No automatic relighting.',
+    'camera.position': '(0,-6,0.86)m; no translation.',
+    'camera.orientation': 'Aim +y, level pitch, zero roll. No automatic face tracking.',
+    'camera.lens': '50mm rectilinear full-frame equivalent; no digital zoom or post-crop.',
+    'camera.sensor': '36×24mm reference, consistent 36×22.5mm active 8:5 crop. Never change sensor/crop between arms.',
+    'camera.aperture': 'f/8 target; depth landmarks must remain legible. Aperture is not a styling instruction.',
+    'camera.focus': 'Focus on the subject plane, nominally 6m; no excessive bokeh, focus pumping or selective blur.',
+    'composition.anchor': 'Midpoint of full-body bounding box at normalized (0.50,0.50), top-left origin.',
+    'composition.framing': 'Full body roughly 64% of image height, feet and head clear of edges, ample space on both sides. 8:5 frame.',
+  },
+  acceptance: [
+    'Approve identity detail and a full-body scene master; approve a wider geometry reference if needed for later reveals. Derived crops are identity aids, not independent identity sources.',
+    'Resolve visible inconsistencies in geometry, hands, clothes, reflections, face and shadows before freezing the baseline.',
+    'Confirm foreground corner, subject and at least two background landmarks are visible and distinguishable.',
+    'Confirm major architecture supports structural symmetry while minor asymmetries remain identifiable.',
+    'Archive original file, dimensions, checksum, source/provider/model/version/settings/seed (when available), and manual approval notes. Increment baseline version if its content changes.',
+    'No baseline or study assets have been created or approved yet.',
+  ],
+};

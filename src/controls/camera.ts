@@ -1,0 +1,58 @@
+import { motionPreview } from '../visuals/previews';
+import { amount, choice, duration, sceneInvariants, speedProfile, toggle } from './parameters';
+import type { ControlSpecification } from './types';
+
+export const cameraControls = [
+  {
+    visualPreview: motionPreview('Horizontal camera rotation · fixed position'),
+    id: 'pan', revision: 1, name: 'Pan', category: 'camera', media: ['video'],
+    shortDescription: 'Rotate the camera horizontally from a fixed position.',
+    creativeIntent: 'Redirect attention across a scene by rotating the camera left or right.',
+    observableBehavior: ['View direction changes horizontally; scene features generally travel opposite the camera turn.', 'New scene regions enter the frame without translational depth parallax.'],
+    testConditions: ['Use a static scene with foreground and background landmarks.', 'Hold the camera center fixed and distinguish yaw from sideways tracking.'],
+    parameters: [choice('direction', 'Direction', 'Camera rotation, not subject travel.', ['left', 'right'], 'right'), amount('angle', 'Angle', 'Total requested horizontal rotation.', 'degrees', 1, 180, 30), duration, speedProfile],
+    invariants: [...sceneInvariants, 'Camera position and height', 'Focal length', 'Camera pitch and roll', 'World positions of subjects'],
+    evaluationCriteria: [{ id: 'pan-yaw', description: 'A coherent horizontal turn occurs in the requested direction and extent.' }, { id: 'pan-fixed-center', description: 'Landmark motion is consistent with rotation about a fixed camera center, without translation-induced parallax.' }],
+    knownFailureModes: [{ id: 'pan-tracking', description: 'Camera tracks sideways instead of rotating.' }, { id: 'pan-subject-motion', description: 'Subject moves while viewpoint remains fixed.' }, { id: 'pan-rebuild', description: 'Scene warps or changes as new regions enter the view.' }],
+    experimentStatus: 'untested',
+  },
+  {
+    visualPreview: motionPreview('Vertical camera rotation · fixed position'),
+    id: 'tilt', revision: 1, name: 'Tilt', category: 'camera', media: ['video'],
+    shortDescription: 'Rotate the camera vertically from a fixed position.',
+    creativeIntent: 'Reveal higher or lower parts of a scene through an upward or downward camera turn.',
+    observableBehavior: ['View direction changes vertically; landmarks generally travel opposite the camera turn.', 'Vertical convergence may change with pitch; the camera does not rise or fall.'],
+    testConditions: ['Use static landmarks at different heights and depths.', 'Distinguish camera pitch from a crane or pedestal movement.'],
+    parameters: [choice('direction', 'Direction', 'Direction of camera pitch.', ['up', 'down'], 'up'), amount('angle', 'Angle', 'Total requested vertical rotation.', 'degrees', 1, 90, 20), duration, speedProfile],
+    invariants: [...sceneInvariants, 'Camera position and height', 'Focal length', 'Camera yaw and roll', 'World positions of subjects'],
+    evaluationCriteria: [{ id: 'tilt-pitch', description: 'Vertical rotation reveals the intended part of the scene in the correct direction.' }, { id: 'tilt-fixed-center', description: 'Landmark trajectories support pitch about a fixed center rather than camera elevation.' }],
+    knownFailureModes: [{ id: 'tilt-crane', description: 'Camera rises or drops instead of pitching.' }, { id: 'tilt-roll', description: 'Frame rotates around the viewing axis.' }, { id: 'tilt-deformation', description: 'Architecture stretches or changes instead of being revealed.' }],
+    experimentStatus: 'untested',
+  },
+  {
+    visualPreview: motionPreview('Forward camera travel · visible depth parallax'),
+    id: 'dolly', revision: 1, name: 'Dolly', category: 'camera', media: ['video'],
+    shortDescription: 'Translate the camera toward or away from a subject.',
+    creativeIntent: 'Change proximity to the subject through physical forward or backward camera motion.',
+    observableBehavior: ['Dolly in increases subject scale; dolly out decreases it.', 'Relative foreground/background scale, occlusion and perspective change with camera distance.'],
+    testConditions: ['Use a static subject and visible off-axis landmarks at multiple depths.', 'Fix focal length; use direction = in for a Dolly In test.', 'Distance is a requested scene-space target; exact metric compliance may be unobservable without calibrated geometry.'],
+    parameters: [choice('direction', 'Direction', 'Camera movement relative to subject.', ['in', 'out'], 'in'), amount('distance', 'Distance', 'Requested camera travel in scene space.', 'meters', 0.1, 20, 2), toggle('subject-lock', 'Subject lock', 'Keep the subject near its initial image position without freezing its scale.', true), duration, speedProfile],
+    invariants: [...sceneInvariants, 'Focal length', 'Subject world position', 'Camera height', 'Requested travel direction'],
+    evaluationCriteria: [{ id: 'dolly-travel', description: 'Subject scale changes coherently with the requested camera travel.' }, { id: 'dolly-depth', description: 'Relative scale and parallax of depth-separated landmarks support translation, rather than uniform image scaling.' }, { id: 'dolly-stability', description: 'Subject identity and the existing environment remain stable during the move.' }],
+    knownFailureModes: [{ id: 'dolly-zoom', description: 'Digital or optical zoom substitutes for camera travel.' }, { id: 'dolly-subject-motion', description: 'The subject approaches or recedes from a stationary camera.' }, { id: 'dolly-scene-drift', description: 'Subject identity or background geometry changes.' }, { id: 'dolly-lens-change', description: 'Focal length changes or compensates for the move.' }],
+    experimentStatus: 'untested',
+  },
+  {
+    visualPreview: motionPreview('Camera arc · fixed radius · stationary subject'),
+    id: 'orbit', revision: 1, name: 'Orbit', category: 'camera', media: ['video'],
+    shortDescription: 'Move around a subject along a camera arc.',
+    creativeIntent: 'Reveal different sides of a stationary subject while maintaining a controlled viewing distance.',
+    observableBehavior: ['Subject orientation relative to the camera changes as different surfaces become visible.', 'Background and foreground move with depth-dependent parallax; the subject stays approximately anchored when locked.'],
+    testConditions: ['Use a stationary asymmetric subject and distinct background landmarks.', 'Specify clockwise/counterclockwise as viewed from above the subject.'],
+    parameters: [choice('direction', 'Direction', 'Viewed from above, around the subject.', ['clockwise', 'counterclockwise'], 'clockwise'), amount('arc', 'Arc', 'Requested angle traveled around the subject.', 'degrees', 1, 360, 45), amount('radius', 'Radius', 'Requested constant distance to the orbit center.', 'meters', 0.5, 30, 3), toggle('subject-lock', 'Subject lock', 'Aim the camera toward the subject during the arc.', true), duration, speedProfile],
+    invariants: [...sceneInvariants, 'Subject world position and orientation', 'Focal length', 'Orbit radius', 'Camera height'],
+    evaluationCriteria: [{ id: 'orbit-viewpoint', description: 'Surface visibility changes coherently with the requested arc and direction.' }, { id: 'orbit-parallax', description: 'Background motion and occlusion support a moving camera around a stationary subject.' }, { id: 'orbit-distance', description: 'Viewing distance remains approximately stable, allowing shape-dependent silhouette changes.' }],
+    knownFailureModes: [{ id: 'orbit-turntable', description: 'Subject spins against a stationary background.' }, { id: 'orbit-pan', description: 'Camera pans without traveling around the subject.' }, { id: 'orbit-morph', description: 'Newly revealed surfaces morph or lose identity.' }, { id: 'orbit-radius-drift', description: 'Camera spirals inward or outward unexpectedly.' }],
+    experimentStatus: 'untested',
+  },
+] satisfies ControlSpecification[];

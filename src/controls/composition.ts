@@ -1,0 +1,58 @@
+import { compositionPreview } from '../visuals/previews';
+import { amount, choice, compositionConditions, sceneInvariants } from './parameters';
+import type { ControlSpecification } from './types';
+
+export const compositionControls = [
+  {
+    visualPreview: compositionPreview("Subject anchor at frame center", [{"type":"center-axis"},{"type":"subject-position","x":0.5,"y":0.5}]),
+    id: 'centered', revision: 1, name: 'Centered', category: 'composition', media: ['image', 'video'],
+    shortDescription: 'Place the chosen visual anchor at the frame center.',
+    creativeIntent: 'Give the primary subject a central, direct emphasis.',
+    observableBehavior: ['The selected subject anchor sits near the midpoint of the frame.', 'Background elements may remain asymmetric.'],
+    testConditions: [...compositionConditions, 'For video, assess anchor placement over the whole shot.'],
+    parameters: [choice('anchor', 'Subject anchor', 'The feature whose position is evaluated.', ['subject-center', 'face-center', 'object-center'], 'subject-center'), amount('tolerance', 'Placement tolerance', 'Acceptable deviation on each axis as a fraction of that frame dimension; a test target, not a benchmark.', 'frame fraction', 0, 0.2, 0.05)],
+    invariants: [...sceneInvariants, 'Subject pose', 'Subject image scale', 'Background object identities'],
+    evaluationCriteria: [{ id: 'centered-placement', description: 'The chosen anchor lies within the declared tolerance of horizontal and vertical center.' }, { id: 'centered-preservation', description: 'Placement changes without duplicating the subject or requiring a symmetric environment.' }],
+    knownFailureModes: [{ id: 'centered-wrong-anchor', description: 'An incidental object or the body center is centered instead of the chosen anchor.' }, { id: 'centered-symmetry', description: 'The background is mirrored unnecessarily.' }, { id: 'centered-crop', description: 'Aggressive cropping centers the subject but changes its scale or truncates it.' }],
+    experimentStatus: 'untested',
+  },
+  {
+    visualPreview: compositionPreview("Bilateral structure across a vertical axis", [{"type":"symmetry-axis"}]),
+    id: 'symmetrical', revision: 1, name: 'Symmetrical', category: 'composition', media: ['image', 'video'],
+    shortDescription: 'Balance corresponding forms across a declared axis.',
+    creativeIntent: 'Create an ordered composition through bilateral structural correspondence.',
+    observableBehavior: ['Major forms and visual weights correspond across the selected frame axis.', 'Small texture differences may remain; centering one object alone is insufficient.'],
+    testConditions: [...compositionConditions, 'Use a scene with plausible bilateral geometry; reframe around an existing symmetry axis.', 'If the scene cannot support symmetry without changing its objects, record that constraint rather than quietly accepting invented geometry.'],
+    parameters: [choice('axis', 'Axis', 'Frame axis across which structure corresponds.', ['vertical', 'horizontal'], 'vertical'), choice('strictness', 'Correspondence', 'Whether structural similarity or a stricter mirror layout is requested.', ['structural', 'mirror-layout'], 'structural')],
+    invariants: [...sceneInvariants, 'Object identities and count', 'Plausible scene geometry', 'Texture identity without forced pixel mirroring'],
+    evaluationCriteria: [{ id: 'symmetrical-correspondence', description: 'Major shapes, spacing and visual weights correspond across the declared axis.' }, { id: 'symmetrical-geometry', description: 'The arrangement remains physically plausible and preserves existing objects.' }],
+    knownFailureModes: [{ id: 'symmetrical-centered-only', description: 'Subject is centered but surrounding structure remains unbalanced.' }, { id: 'symmetrical-duplication', description: 'Subjects or architectural details are duplicated to force symmetry.' }, { id: 'symmetrical-mirror', description: 'Literal pixel mirroring introduces seams or implausible anatomy.' }],
+    experimentStatus: 'untested',
+  },
+  {
+    visualPreview: compositionPreview("Subject anchor at the upper-left thirds intersection", [{"type":"thirds-grid"},{"type":"subject-position","x":0.3333333333333333,"y":0.3333333333333333}]),
+    id: 'rule-of-thirds', revision: 1, name: 'Rule of Thirds', category: 'composition', media: ['image', 'video'],
+    shortDescription: 'Place a specified anchor at a thirds intersection.',
+    creativeIntent: 'Use off-center subject placement to create deliberate spatial balance.',
+    observableBehavior: ['The selected subject anchor lies near the requested intersection of thirds lines.', 'The remaining space establishes a readable relationship between subject and environment.'],
+    testConditions: [...compositionConditions, 'Use frame coordinates with origin at top left; thirds intersections are at 1/3 or 2/3 on each axis.'],
+    parameters: [choice('intersection', 'Intersection', 'Target intersection in the frame.', ['upper-left', 'upper-right', 'lower-left', 'lower-right'], 'upper-left'), choice('anchor', 'Subject anchor', 'Feature whose placement is evaluated.', ['face-center', 'subject-center', 'object-center'], 'face-center'), amount('tolerance', 'Placement tolerance', 'Acceptable deviation per axis from the selected intersection.', 'frame fraction', 0, 0.2, 0.05)],
+    invariants: [...sceneInvariants, 'Subject identity and pose', 'Subject image scale', 'Object count'],
+    evaluationCriteria: [{ id: 'thirds-placement', description: 'The declared anchor falls within tolerance of the requested thirds intersection.' }, { id: 'thirds-context', description: 'Off-center framing preserves subject readability and scene identity.' }],
+    knownFailureModes: [{ id: 'thirds-center', description: 'The primary subject stays centered.' }, { id: 'thirds-wrong-point', description: 'The wrong anchor or thirds intersection is used.' }, { id: 'thirds-grid', description: 'Visible grid lines are rendered into the output.' }, { id: 'thirds-scale', description: 'Cropping or resizing changes subject scale to imitate placement.' }],
+    experimentStatus: 'untested',
+  },
+  {
+    visualPreview: compositionPreview("Quiet region on the right · subject outside it", [{"type":"negative-space","x":0.6,"y":0,"width":0.4,"height":1},{"type":"subject-position","x":0.3,"y":0.5}]),
+    id: 'negative-space', revision: 1, name: 'Negative Space', category: 'composition', media: ['image', 'video'],
+    shortDescription: 'Reserve a low-detail region beside the subject.',
+    creativeIntent: 'Give the subject breathing room and reserve a visually quiet region for later use.',
+    observableBehavior: ['The requested side contains a contiguous, low-detail area without competing focal objects.', 'The subject remains readable outside that region; the area need not be blank or white.'],
+    testConditions: [...compositionConditions, 'Prefer a scene with an existing quiet area that can be revealed by reframing.', 'Keep text out of the generated image; this control reserves space only.'],
+    parameters: [choice('side', 'Space location', 'Side of frame reserved for the quiet region.', ['left', 'right', 'top', 'bottom'], 'right'), amount('area-fraction', 'Target area', 'Approximate share of the frame reserved for quiet space; assess qualitatively unless segmented.', 'frame fraction', 0.1, 0.7, 0.4), choice('detail', 'Detail level', 'Permitted visual activity in the reserved region.', ['low-detail', 'near-uniform'], 'low-detail')],
+    invariants: [...sceneInvariants, 'Subject pose and readability', 'Subject image scale', 'Existing object identities'],
+    evaluationCriteria: [{ id: 'negative-space-region', description: 'A contiguous low-detail region appears on the requested side with approximately the requested area.' }, { id: 'negative-space-hierarchy', description: 'The subject stays distinct and the reserved region contains no competing focal point or added text.' }],
+    knownFailureModes: [{ id: 'negative-space-fill', description: 'New props, texture or text fill the reserved region.' }, { id: 'negative-space-wrong-side', description: 'Quiet space appears on the wrong side.' }, { id: 'negative-space-shrink', description: 'Subject is excessively reduced or cropped to create space.' }, { id: 'negative-space-delete', description: 'Existing scene objects are deleted or replaced with an unrelated blank background.' }],
+    experimentStatus: 'untested',
+  },
+] satisfies ControlSpecification[];
