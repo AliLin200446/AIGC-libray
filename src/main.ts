@@ -20,7 +20,10 @@ let disposePixels = () => {};
 function refreshPixels() { disposePixels(); disposePixels = mountPixelTheme(); }
 const themeOrder = new MutationObserver(applyPixelStyles);
 themeOrder.observe(document.head, { childList: true });
-const pixelMounts = new MutationObserver(refreshPixels);
+const pixelMounts = new MutationObserver(records => {
+  // Reticle readouts are owned by the pointer layer, not a route/theme render.
+  if (records.some(record => !(record.target instanceof Element && record.target.closest('.ff-reticle-read')))) refreshPixels();
+});
 window.addEventListener('pagehide', event => { if (!event.persisted) { disposeInteractions(); disposePixels(); pixelMounts.disconnect(); themeOrder.disconnect(); } });
 const app = document.querySelector<HTMLElement>('#app');
 if (!app) throw new Error('Missing application mount point.');

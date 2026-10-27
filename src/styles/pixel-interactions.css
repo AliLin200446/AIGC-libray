@@ -26,6 +26,6 @@
 .lens-explore,.catalog-index-link { display:inline-flex;align-items:center; }
 .lens-explore:hover,.catalog-index-link:hover { color:var(--ff-camera); }
 @media(prefers-reduced-motion:reduce) {
- .ff-fx-canvas { display:none; }
+ .ff-fx-canvas,.ff-reticle,.ff-reticle-read { display:none; }
  *,*::before,*::after { animation:none !important;transition:none !important; }
 }

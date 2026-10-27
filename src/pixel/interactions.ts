@@ -106,7 +106,8 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
   let wake = 0;                 // 0..1, eased
   let raf = 0, last = 0, lastMove = -Infinity;
 
-  const motionOK = () => !reduce.matches;
+  const motionOK = () => !reduce.matches && !document.hidden;
+  let touch: { id: number; x: number; y: number; at: number } | undefined;
 
   function spawn(x: number, y: number, family?: Family, burst = false) {
     if (parts.length >= o.maxParticles) parts.shift();
@@ -229,7 +230,11 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
     el instanceof Element && !el.closest(block) && !(window.getSelection()?.toString());
 
   function onMove(e: PointerEvent) {
-    if (e.pointerType === 'touch' || !motionOK()) return;
+    if (e.pointerType === 'touch') {
+      if (touch && (e.pointerId !== touch.id || Math.hypot(e.clientX - touch.x, e.clientY - touch.y) > 8)) touch = undefined;
+      return;
+    }
+    if (!motionOK()) return;
     lastMove = performance.now();
     const blank = isBlank(e.target) && e.buttons === 0;
     if (px >= 0 && overBlank && blank && o.trail && motionOK()) {
@@ -244,7 +249,8 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
 
   /* touch: a tap on empty ground drops a short handful */
   function onTap(e: PointerEvent) {
-    if (e.pointerType !== 'touch' || !o.trail || !motionOK() || !isBlank(e.target)) return;
+    const tap = touch; touch = undefined;
+    if (e.pointerType !== 'touch' || !tap || tap.id !== e.pointerId || performance.now() - tap.at > 500 || Math.hypot(e.clientX - tap.x, e.clientY - tap.y) > 8 || !o.trail || !motionOK() || !isBlank(e.target)) return;
     for (let i = 0; i < 6; i++) spawn(e.clientX + (i - 2.5) * CELL * 3, e.clientY);
   }
 
@@ -258,6 +264,10 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
     return null;
   }
   function onDown(e: PointerEvent) {
+    if (e.pointerType === 'touch') {
+      onLeave();
+      touch = e.isPrimary && motionOK() && isBlank(e.target) ? { id: e.pointerId, x: e.clientX, y: e.clientY, at: performance.now() } : undefined;
+    }
     if (!o.stamp || !motionOK()) return;
     const ctl = (e.target as Element | null)?.closest?.('.instrument-control, .category-trigger, [data-ff-family] button');
     if (!ctl) return;
@@ -280,16 +290,18 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
     return r;
   }
   function onVpMove(e: PointerEvent) {
-    if (!o.reticle || e.pointerType === 'touch') { viewports.forEach((_, v) => v.classList.remove('ff-has-reticle')); return; }
+    if (!o.reticle || !motionOK() || e.pointerType === 'touch') { viewports.forEach((_, v) => v.classList.remove('ff-has-reticle')); return; }
     const vp = (e.target as Element | null)?.closest?.<HTMLElement>('.instrument-viewport');
     viewports.forEach(({ ret, read }, v) => { if (!v.isConnected) { ret.remove(); read.remove(); viewports.delete(v); } else if (v !== vp) v.classList.remove('ff-has-reticle'); });
     if (!vp) return;
     const { ret, read } = ensureReticle(vp);
     const b = vp.getBoundingClientRect();
+    if (b.width <= 0 || b.height <= 0 || e.clientX < b.left || e.clientX > b.right || e.clientY < b.top || e.clientY > b.bottom) { vp.classList.remove('ff-has-reticle'); return; }
     const x = Math.max(0, Math.min(b.width, Math.round((e.clientX - b.left) / CELL) * CELL));
     const y = Math.max(0, Math.min(b.height, Math.round((e.clientY - b.top) / CELL) * CELL));
     ret.style.transform = `translate(${x}px, ${y}px)`;
-    read.textContent = `X ${(x / b.width).toFixed(2)}  Y ${(y / b.height).toFixed(2)}`;
+    const label = `X ${(x / b.width).toFixed(2)}  Y ${(y / b.height).toFixed(2)}`;
+    if (read.textContent !== label) read.textContent = label;
     // keep the readout inside the frame
     const rx = Math.max(0, Math.min(x + 16, b.width - read.offsetWidth - 8));
     const ry = Math.max(0, Math.min(Math.max(y - 22, 8), b.height - read.offsetHeight - 8));
@@ -325,13 +337,24 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
 
   /* ---------- wiring ---------- */
   const onPointerMove = (e: PointerEvent) => { onMove(e); onVpMove(e); onRulerMove(e); };
-  const onTheme = () => { pal = readPalette(); if (reduce.matches) { cancelAnimationFrame(raf); raf = 0; last = 0; parts.length = 0; wake = 0; overBlank = false; travel = 0; clearTicks(); ctx.clearRect(0, 0, W, H); } };
+  function stopEffects() {
+    cancelAnimationFrame(raf); raf = 0; last = 0; lastMove = -Infinity;
+    parts.length = 0; wake = 0; overBlank = false; travel = 0; px = -1; py = -1; touch = undefined;
+    clearTicks(); ctx.clearRect(0, 0, W, H);
+    viewports.forEach((_, v) => v.classList.remove('ff-has-reticle'));
+  }
+  const onTheme = () => { pal = readPalette(); if (reduce.matches) stopEffects(); };
+  const onVisibility = () => { if (document.hidden) stopEffects(); };
+  const onCancel = () => { touch = undefined; onLeave(); };
   window.addEventListener('pointermove', onPointerMove, { passive: true });
   window.addEventListener('pointerdown', onDown, { passive: true });
   window.addEventListener('pointerup', onTap, { passive: true });
   document.documentElement.addEventListener('pointerleave', onLeave);
   window.addEventListener('resize', resize);
-  window.addEventListener('blur', onLeave);
+  window.addEventListener('blur', stopEffects);
+  window.addEventListener('pointercancel', onCancel);
+  window.addEventListener('scroll', stopEffects, { passive: true });
+  document.addEventListener('visibilitychange', onVisibility);
   reduce.addEventListener?.('change', onTheme);
 
   return () => {
@@ -341,7 +364,10 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
     window.removeEventListener('pointerup', onTap);
     document.documentElement.removeEventListener('pointerleave', onLeave);
     window.removeEventListener('resize', resize);
-    window.removeEventListener('blur', onLeave);
+    window.removeEventListener('blur', stopEffects);
+    window.removeEventListener('pointercancel', onCancel);
+    window.removeEventListener('scroll', stopEffects);
+    document.removeEventListener('visibilitychange', onVisibility);
     reduce.removeEventListener?.('change', onTheme);
     clearTicks();
     viewports.forEach(({ ret, read }, vp) => { ret.remove(); read.remove(); vp.classList.remove('ff-has-reticle'); });

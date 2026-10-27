@@ -10,7 +10,7 @@
     "dev": "vite --configLoader runner --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "tsx --test server/film-references/import.test.ts server/film-references/references.test.ts server/clips/clips.test.ts src/clips/clips.test.ts src/controls/catalog.test.ts src/experiments/studies/studies.test.ts src/library/instrument/camera.test.ts src/library/reference/reference.test.ts server/reference.test.ts server/evaluation/evaluation.test.ts server/site.test.ts server/public-reference.test.ts src/library/instrument/lens.test.ts src/references/references.test.ts src/library/instrument/compose.test.ts src/recipes/recipes.test.ts",
+    "test": "tsx --test server/film-references/import.test.ts server/film-references/references.test.ts server/clips/clips.test.ts src/clips/clips.test.ts src/controls/catalog.test.ts src/experiments/studies/studies.test.ts src/library/instrument/camera.test.ts src/library/reference/reference.test.ts server/reference.test.ts server/evaluation/evaluation.test.ts server/site.test.ts server/public-reference.test.ts src/library/instrument/lens.test.ts src/references/references.test.ts src/library/instrument/compose.test.ts src/recipes/recipes.test.ts src/pixel/interactions.test.ts",
     "build": "npm run typecheck && vite build --configLoader runner && tsx scripts/prepare-release.ts && node scripts/check-production.mjs && node scripts/build-reference-server.mjs",
     "preview": "vite preview --configLoader runner --host 127.0.0.1",
     "start": "tsx server/main.ts",
