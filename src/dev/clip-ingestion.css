@@ -1,0 +1,27 @@
+.clip-admin { padding-bottom:80px; }
+.admin-notice { padding:18px;background:var(--ff-surface);border:1px solid var(--ff-rule);font-size:13px; }
+.admin-actions { display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin:20px 0; }
+.admin-actions button,.admin-actions select { font-size:12px; }
+.admin-queue { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0; }
+.admin-queue .admin-notice { grid-column:1/-1; }
+.archive-page .admin-card { display:flex;flex-direction:column;gap:8px;text-align:left;padding:0 0 16px; }
+.admin-card img { width:100%;height:auto;aspect-ratio:16/9;object-fit:cover; }
+.admin-card .technical { font-size:10px; }
+.admin-card strong { font-size:16px; }
+.admin-card span:last-child { font-size:12px; }
+.admin-detail { border-top:1px solid var(--ff-rule);padding-top:32px; }
+.admin-detail:empty { display:none; }
+.admin-detail > video { display:block;width:100%;max-width:900px;aspect-ratio:16/9;margin:24px 0;background:var(--ff-ink); }
+.admin-detail > a { display:inline-block;margin-right:24px; }
+.admin-frames { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:30px 0; }
+.admin-frames figure { margin:0; }
+.admin-frames img { width:100%;height:auto; }
+.admin-frames figcaption { font-size:10px; }
+.admin-detail textarea,.admin-detail > input { display:block;width:100%;padding:12px;margin:12px 0;background:var(--ff-surface);color:var(--ff-ink);border:1px solid var(--ff-rule-strong); }
+.admin-detail textarea[aria-label='Analysis JSON'] { font:12px/1.7 var(--ff-technical); }
+.admin-findings { display:grid;grid-template-columns:180px 1fr;gap:12px;font-size:13px; }
+.admin-findings dd { margin:0; }
+.admin-prompt { margin:20px 0 !important;max-width:800px;font-size:19px; }
+.admin-check { display:flex;align-items:start;gap:12px;font-size:13px; }
+@media(max-width:1000px){.admin-queue{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:700px){.admin-queue,.admin-frames{grid-template-columns:repeat(2,minmax(0,1fr));}.admin-findings{grid-template-columns:1fr;gap:6px;}.admin-findings dd{margin-bottom:12px;}.admin-detail{overflow-wrap:anywhere;}}

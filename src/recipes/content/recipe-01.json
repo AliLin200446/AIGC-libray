@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "recipe-01",
+  "slug": "recipe-01",
+  "title": "Recipe 01",
+  "description": null,
+  "creator": { "name": null, "portfolio": "https://alilinlab.com" },
+  "controls": [],
+  "sceneState": null,
+  "cameraState": null,
+  "translations": [{ "id": "execution-01", "model": null, "modelVersion": null, "submittedPrompt": null, "settings": null }],
+  "results": [{ "id": "result-01", "translationId": "execution-01", "mediaType": "video", "asset": null, "sha256": null, "creatorNotes": null, "observedBehavior": null, "deviations": null, "createdAt": null, "provenance": { "rightsStatus": "unknown", "confirmedBy": null, "source": null } }],
+  "tags": [],
+  "status": "draft",
+  "mappingConfirmedBy": null,
+  "createdAt": null
+}

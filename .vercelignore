@@ -5,3 +5,13 @@ node_modules
 local-reference-suite
 reference-evaluation
 .codex
+
+# Never upload unpublished recipe source media.
+local-recipes
+
+# Private candidate queues, permission evidence and unreleased media.
+local-clip-ingestion/
+.clip-release-*/
+
+# Private film-reference review decisions and permission evidence.
+local-film-references/

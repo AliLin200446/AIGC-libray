@@ -5,9 +5,7 @@ import { AnalysisValidationError } from './schema';
 import type { ProviderState, ReferenceAnalysisProvider, ReferenceImage } from './types';
 
 // Browser transport only. Readiness and all credentials belong to the same-origin server.
-export const referenceProvider: ReferenceAnalysisProvider = import.meta.env?.PROD
-  ? { id: 'unavailable', model: null, available: false, async analyzeImage() { throw new ReferenceRequestError('server_unavailable'); } }
-  : createServerProvider();
+export const referenceProvider: ReferenceAnalysisProvider = createServerProvider();
 export const analysisPromptPath = 'docs/reference-analysis-prompt.md';
 export const analysisPromptVersion = '1';
 

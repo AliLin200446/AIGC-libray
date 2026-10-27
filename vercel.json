@@ -43,5 +43,11 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/reference-analysis.mjs": {
+      "maxDuration": 90,
+      "supportsCancellation": true
+    }
+  }
 }

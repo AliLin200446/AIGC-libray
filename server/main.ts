@@ -1,8 +1,13 @@
 import { createServer } from 'node:http';
+import { existsSync } from 'node:fs';
+import { loadEnvFile } from 'node:process';
 import { staticSite } from './site';
-// Local production-output preview. Public release uses Vercel static hosting.
-// No provider middleware or credentials are loaded by this server.
-const handler = staticSite('dist');
-const server = createServer((req, res) => { void handler(req, res); });
+import { createPublicReferenceHandler } from './public-reference';
+import { referenceNode } from './reference-node';
+import { serverConfig } from './openai';
+for (const file of ['.env.local','.env']) if (existsSync(file)) loadEnvFile(file);
+const analysis = referenceNode(createPublicReferenceHandler(serverConfig(process.env)));
+const site = staticSite('dist');
+const server = createServer((req,res) => { void (req.url?.split('?')[0] === '/api/reference-analysis' ? analysis(req,res) : site(req,res)); });
 server.requestTimeout = 15000; server.headersTimeout = 10000;
-server.listen(Number(process.env.PORT ?? 5175), '127.0.0.1', () => console.log('Framefield static preview ready. Reference Analysis disabled.'));
+server.listen(Number(process.env.PORT ?? 5175), '127.0.0.1', () => console.log('Framefield local production preview ready.'));

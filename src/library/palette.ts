@@ -1,0 +1,2 @@
+/** Resolve the CSS palette once when constructing the existing Three.js scene. */
+export function scenePalette(host:HTMLElement){const style=getComputedStyle(host);const color=(token:string)=>style.getPropertyValue(`--ff-${token}`).trim();return {ink:color('ink'),moss:color('moss'),jade:color('jade'),mutedMoss:color('muted-moss'),field:color('scene-field'),stone:color('scene-stone'),ground:color('scene-ground'),wall:color('scene-wall'),recess:color('scene-recess'),subject:color('scene-subject'),day:color('light-day'),warm:color('light-warm')};}

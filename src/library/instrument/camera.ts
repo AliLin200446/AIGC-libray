@@ -1,3 +1,4 @@
+import { clampFocal } from './lens';
 import { PerspectiveCamera, Vector3 } from 'three';
 import type { ControlId } from '../../controls/types';
 import type { ReconstructionControlId } from '../reference/types';
@@ -15,14 +16,17 @@ export const homePose = (): DemonstrationPose => ({ position: new Vector3(0, .9,
 export const demonstrationProgress = (elapsedMs: number, reducedMotion: boolean): number => reducedMotion ? 1 : Math.max(0, Math.min(elapsedMs / 2200, 1));
 export const interpolationBlend = (deltaSeconds: number, reducedMotion: boolean): number => reducedMotion ? 1 : 1 - Math.exp(-deltaSeconds * 13);
 
+export function lensPose(value: number): DemonstrationPose {
+  const pose=homePose(); pose.focalLength=clampFocal(value); pose.position.z=6*pose.focalLength/50; return pose;
+}
+
 export function demonstrationPose(id: ControlId | null, progress = 1): DemonstrationPose {
   const pose = homePose();
   const t = Math.max(0, Math.min(1, progress));
   if (!id || id === 'centered' || id === 'lens-50mm') return pose;
   if (id.startsWith('lens-')) {
     const mm = Number(id.slice(5, -2));
-    pose.focalLength = mm;
-    pose.position.z = 6 * mm / 50;
+    return lensPose(mm);
   }
   if (id === 'pan') pose.target.set(Math.sin(-.16 * t) * 6, .9, 6 - Math.cos(.16 * t) * 6);
   if (id === 'tilt') pose.target.set(0, .9 + Math.sin(.1 * t) * 6, 6 - Math.cos(.1 * t) * 6);
@@ -63,4 +67,15 @@ export function stackPose(ids: readonly ReconstructionControlId[]): Demonstratio
 export function projectedAnchor(camera: PerspectiveCamera, anchor = subjectAnchor): { x: number; y: number } {
   const point = anchor.clone().project(camera);
   return { x: (point.x + 1) / 2, y: (1 - point.y) / 2 };
+}
+
+/** Preview a movement from the operator's current production pose. */
+export function relativeCameraPose(base:DemonstrationPose,id:ControlId|null,progress:number,subject:Vector3):DemonstrationPose {
+ const pose={position:base.position.clone(),target:base.target.clone(),focalLength:base.focalLength};
+ const t=Math.max(0,Math.min(1,progress)),direction=pose.target.clone().sub(pose.position);
+ if(id==='pan')pose.target.copy(direction.applyAxisAngle(new Vector3(0,1,0),.16*t).add(pose.position));
+ if(id==='tilt'){const right=new Vector3().crossVectors(direction,new Vector3(0,1,0)).normalize();pose.target.copy(direction.applyAxisAngle(right,.1*t).add(pose.position));}
+ if(id==='dolly')pose.position.add(direction.normalize().multiplyScalar(1.2*t));
+ if(id==='orbit'){pose.position.sub(subject).applyAxisAngle(new Vector3(0,1,0),.38*t).add(subject);pose.target.copy(subject);}
+ return pose;
 }

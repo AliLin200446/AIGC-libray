@@ -17,6 +17,10 @@ export function button(text: string, onClick: () => void, className = ''): HTMLB
 }
 export function heading(index: string, name: string): HTMLElement {
   const row = el('div', 'section-heading');
-  row.append(el('span', 'eyebrow', index), el('h2', '', name));
+  const eyebrow = el('span', 'eyebrow');
+  const numbered = /^(\d{2})(.*)$/.exec(index);
+  if (numbered) eyebrow.append(el('span', 'ff-section-no', numbered[1]), document.createTextNode(numbered[2]!));
+  else eyebrow.textContent = index;
+  row.append(eyebrow, el('h2', '', name));
   return row;
 }

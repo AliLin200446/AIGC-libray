@@ -1,0 +1,16 @@
+[
+  {
+    "id": "film-discovery-01",
+    "version": 1,
+    "sourceUrl": "https://www.youtube.com/watch?v=AfZbh4cteqI",
+    "reviewer": "REPLACE WITH YOUR NAME",
+    "notes": "Verify this publisher and source association; no usage rights granted by this manifest."
+  },
+  {
+    "id": "film-discovery-12",
+    "version": 1,
+    "sourceUrl": "https://www.youtube.com/watch?v=1wcTaimH9mI",
+    "reviewer": "REPLACE WITH YOUR NAME",
+    "notes": "Verify this publisher and source association; no usage rights granted by this manifest."
+  }
+]

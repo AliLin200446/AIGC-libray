@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { readCanonicalPrompt } from './prompt';
 import sharp from 'sharp';
 import { referenceAnalysisSchema, validateSchema, AnalysisValidationError } from '../src/library/reference/schema';
 import { normalizeAnalysis } from '../src/library/reference/validate';
@@ -70,7 +70,7 @@ export async function analyzeOpenAI(bytes:Buffer,mime:string,config:ServerConfig
   if(signal.aborted)throw new ReferenceRequestError('cancelled');
   const started=Date.now();const image=await prepareImage(bytes,mime);
   const timeout=AbortSignal.timeout(config.timeoutMs);const combined=AbortSignal.any([signal,timeout]);
-  const prompt=await readFile(new URL('../docs/reference-analysis-prompt.md',import.meta.url),'utf8');
+  const prompt=await readCanonicalPrompt();
   try{
     const response=await fetcher('https://api.openai.com/v1/responses',{
       method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${config.apiKey}`},

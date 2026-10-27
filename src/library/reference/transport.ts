@@ -1,4 +1,4 @@
-import { analysisErrors, ReferenceRequestError, type AnalysisErrorCode } from './errors';
+import { analysisErrors, ReferenceRequestError, PUBLIC_ANALYSIS_BYTES, type AnalysisErrorCode } from './errors';
 import type { ReferenceAnalysisProvider } from './types';
 export function createServerProvider(fetcher:typeof fetch=fetch):ReferenceAnalysisProvider {
   const provider:ReferenceAnalysisProvider={
@@ -8,9 +8,11 @@ export function createServerProvider(fetcher:typeof fetch=fetch):ReferenceAnalys
       catch{provider.available=false;return false;}
     },
     async analyzeImage(image,signal){
+      if(image.file.size>PUBLIC_ANALYSIS_BYTES)throw new ReferenceRequestError('analysis_image_too_large');
       let response:Response;
       try{response=await fetcher('/api/reference-analysis',{method:'POST',headers:{'Content-Type':image.file.type,'X-Reference-Analysis':'1'},body:image.file,signal});}
       catch{throw new ReferenceRequestError(signal.aborted?'cancelled':'server_unavailable');}
+      if(response.status===413)throw new ReferenceRequestError('analysis_image_too_large');
       let data:unknown;try{data=await response.json();}catch{throw new ReferenceRequestError('malformed_output');}
       if(!response.ok){const code=(data as {error?:{code?:string}})?.error?.code;throw new ReferenceRequestError(code&&Object.hasOwn(analysisErrors,code)?code as AnalysisErrorCode:'server_unavailable');}
       return (data as {analysis?:unknown})?.analysis;

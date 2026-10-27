@@ -53,7 +53,8 @@ export function interpretation(control: ControlSpecification, state: ControlConf
     }
     notes.replaceChildren();
     for (const [title, entries] of [['Known behaviors', record?.observedBehavior ?? []], ['Known failures', record?.knownFailures ?? []]] as const) {
-      const block = el('div'); block.append(el('h3', '', title), el('p', '', entries.length ? entries.join(' ') : 'Untested. No observations recorded.')); notes.append(block);
+      const block = el('div'); block.append(el('h3', '', title));
+      if(entries.length){const list=el('ol','technical-list');entries.forEach(entry=>list.append(el('li','',entry)));block.append(list);}else block.append(el('p','','Untested. No observations recorded.'));notes.append(block);
     }
     notes.append(el('p', 'field-description', 'Strong under Collateral Change means unrelated aspects were preserved. Model observations may cover other configurations; ratings above require a matching experiment.'));
     selectedModel.replaceChildren(el('h3', 'eyebrow', 'SELECTED MODEL'), el('p', '', `${slot?.label ?? 'No model'} · ${slot?.model?.name ?? 'Not assigned'}`));

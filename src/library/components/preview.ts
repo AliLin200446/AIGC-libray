@@ -21,7 +21,7 @@ export function overlayLayer(overlays: readonly CompositionOverlay[]): SVGElemen
   return svg;
 }
 
-function motionDiagram(control: ControlSpecification): SVGElement {
+export function motionDiagram(control: ControlSpecification): SVGElement {
   const svg = shape('svg', { viewBox: '0 0 1000 625', class: 'motion-diagram', 'aria-hidden': 'true' });
   const paths: Record<string, string[]> = {
     pan: ['M190 310 H810 M780 285 L810 310 L780 335', 'M310 255 V370 M500 230 V395 M690 255 V370'],

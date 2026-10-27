@@ -1,0 +1,697 @@
+{
+  "schemaVersion": 1,
+  "discoveredAtDate": "2026-10-26",
+  "method": "Initial bounded research pass using web search, primary source pages and YouTube oEmbed metadata; not an executed application discovery adapter.",
+  "status": "awaiting-discovery-and-plan-review",
+  "counts": {
+    "films": 12,
+    "oembedResponses": 8,
+    "sourcePageOnly": 4,
+    "authorizedLocalProcessing": 0,
+    "videoDownloads": 0,
+    "visionCalls": 0,
+    "published": 0
+  },
+  "policyReferences": [
+    "https://developers.google.com/youtube/terms/developer-policies",
+    "https://developers.google.com/youtube/data/reference/rest/v3/videos"
+  ],
+  "candidates": [
+    {
+      "id": "film-discovery-01",
+      "film": "In the Mood for Love",
+      "year": 2000,
+      "director": "Wong Kar Wai",
+      "cinematographers": [
+        "Christopher Doyle",
+        "Mark Lee Ping Bing"
+      ],
+      "sceneDescription": "Criterion montage; corridor/noodle-shop framing is a review target",
+      "sourceUrl": "https://www.youtube.com/watch?v=AfZbh4cteqI",
+      "videoTitle": "Three Reasons: In the Mood for Love",
+      "publisher": "CRITERION",
+      "publisherUrl": "https://www.youtube.com/@criterioncollection",
+      "providerVideoId": "AfZbh4cteqI",
+      "thumbnailUrl": "https://i.ytimg.com/vi/AfZbh4cteqI/hqdefault.jpg",
+      "cameraTechnique": {
+        "value": "Foreground occlusion and constrained framing",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "official-oembed-metadata-response",
+      "embedding": {
+        "technicalStatus": "oembed-returned-player",
+        "embedUrl": "https://www.youtube.com/embed/AfZbh4cteqI",
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "platform-embed-after-review",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://www.criterion.com/films/198-in-the-mood-for-love"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified.",
+        "Montage/production-page fallback, not a verified isolated scene."
+      ]
+    },
+    {
+      "id": "film-discovery-02",
+      "film": "The Grand Budapest Hotel",
+      "year": 2014,
+      "director": "Wes Anderson",
+      "cinematographers": [
+        "Robert Yeoman"
+      ],
+      "sceneDescription": "He’s a Conceirge! — official clip listed on distributor page",
+      "sourceUrl": "https://www.searchlightpictures.com/thegrandbudapesthotel",
+      "videoTitle": "He’s a Conceirge!",
+      "publisher": "Searchlight Pictures",
+      "publisherUrl": null,
+      "providerVideoId": null,
+      "thumbnailUrl": null,
+      "cameraTechnique": {
+        "value": "Centered and symmetrical composition",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "source-page-reviewed",
+      "embedding": {
+        "technicalStatus": "not-verified",
+        "embedUrl": null,
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "external-source-link",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://theasc.com/article/yeoman-asc-awards-honoree/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    },
+    {
+      "id": "film-discovery-03",
+      "film": "Children of Men",
+      "year": 2006,
+      "director": "Alfonso Cuarón",
+      "cinematographers": [
+        "Emmanuel Lubezki"
+      ],
+      "sceneDescription": "Car ambush",
+      "sourceUrl": "https://www.youtube.com/watch?v=pOyAXPn1V9k",
+      "videoTitle": "Children Of Men (2006) One-Shot Car Scene | Science Fiction Station",
+      "publisher": "Science Fiction Station",
+      "publisherUrl": "https://www.youtube.com/@ScienceFictionStation",
+      "providerVideoId": "pOyAXPn1V9k",
+      "thumbnailUrl": "https://i.ytimg.com/vi/pOyAXPn1V9k/hqdefault.jpg",
+      "cameraTechnique": {
+        "value": "Continuous in-car reframing; specialized rig, not generic handheld",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "official-oembed-metadata-response",
+      "embedding": {
+        "technicalStatus": "oembed-returned-player",
+        "embedUrl": "https://www.youtube.com/embed/pOyAXPn1V9k",
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "platform-embed-after-review",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://theasc.com/article/ac-gallery-children-of-men/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified.",
+        "Publisher relationship to rights holder needs verification."
+      ]
+    },
+    {
+      "id": "film-discovery-04",
+      "film": "2001: A Space Odyssey",
+      "year": 1968,
+      "director": "Stanley Kubrick",
+      "cinematographers": [
+        "Geoffrey Unsworth"
+      ],
+      "sceneDescription": "HAL reads lips",
+      "sourceUrl": "https://www.youtube.com/watch?v=XDO8OYnmkNY",
+      "videoTitle": "2001: A Space Odyssey (1968) - Hal Reads Lips Scene (2/6) | Movieclips",
+      "publisher": "Movieclips",
+      "publisherUrl": "https://www.youtube.com/@MOVIECLIPS",
+      "providerVideoId": "XDO8OYnmkNY",
+      "thumbnailUrl": "https://i.ytimg.com/vi/XDO8OYnmkNY/hqdefault.jpg",
+      "cameraTechnique": {
+        "value": "Static framing and point-of-view composition",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "official-oembed-metadata-response",
+      "embedding": {
+        "technicalStatus": "oembed-returned-player",
+        "embedUrl": "https://www.youtube.com/embed/XDO8OYnmkNY",
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "platform-embed-after-review",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://theasc.com/article/the-bsc-at-75/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    },
+    {
+      "id": "film-discovery-05",
+      "film": "The Shining",
+      "year": 1980,
+      "director": "Stanley Kubrick",
+      "cinematographers": [
+        "John Alcott"
+      ],
+      "sceneDescription": "Danny’s tricycle corridor / Come Play With Us",
+      "sourceUrl": "https://www.youtube.com/watch?v=CMbI7DmLCNI",
+      "videoTitle": "The Shining (1980) - Come Play With Us Scene (2/7) | Movieclips",
+      "publisher": "Movieclips",
+      "publisherUrl": "https://www.youtube.com/@MOVIECLIPS",
+      "providerVideoId": "CMbI7DmLCNI",
+      "thumbnailUrl": "https://i.ytimg.com/vi/CMbI7DmLCNI/hqdefault.jpg",
+      "cameraTechnique": {
+        "value": "Low following tracking shot",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "official-oembed-metadata-response",
+      "embedding": {
+        "technicalStatus": "oembed-returned-player",
+        "embedUrl": "https://www.youtube.com/embed/CMbI7DmLCNI",
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "platform-embed-after-review",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://theasc.com/article/steadicam-shining-revisited/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    },
+    {
+      "id": "film-discovery-06",
+      "film": "Blade Runner 2049",
+      "year": 2017,
+      "director": "Denis Villeneuve",
+      "cinematographers": [
+        "Roger Deakins"
+      ],
+      "sceneDescription": "Finding Rick Deckard",
+      "sourceUrl": "https://www.youtube.com/watch?v=tJya-fbl4R8",
+      "videoTitle": "Blade Runner 2049 (2017) - Finding Rick Deckard Scene (6/10) | Movieclips",
+      "publisher": "Movieclips",
+      "publisherUrl": "https://www.youtube.com/@MOVIECLIPS",
+      "providerVideoId": "tJya-fbl4R8",
+      "thumbnailUrl": "https://i.ytimg.com/vi/tJya-fbl4R8/hqdefault.jpg",
+      "cameraTechnique": {
+        "value": "Depth, foreground occlusion, and movement to inspect",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "official-oembed-metadata-response",
+      "embedding": {
+        "technicalStatus": "oembed-returned-player",
+        "embedUrl": "https://www.youtube.com/embed/tJya-fbl4R8",
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "platform-embed-after-review",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://theasc.com/article/uncanny-valley-blade-runner-2049/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    },
+    {
+      "id": "film-discovery-07",
+      "film": "Birdman",
+      "year": 2014,
+      "director": "Alejandro González Iñárritu",
+      "cinematographers": [
+        "Emmanuel Lubezki"
+      ],
+      "sceneDescription": "Fight Club — official clip listed on distributor page",
+      "sourceUrl": "https://www.searchlightpictures.com/birdman",
+      "videoTitle": "Birdman Fight Club Clip",
+      "publisher": "Searchlight Pictures",
+      "publisherUrl": null,
+      "providerVideoId": null,
+      "thumbnailUrl": null,
+      "cameraTechnique": {
+        "value": "Continuous moving reframing; excerpt continuity needs review",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "source-page-reviewed",
+      "embedding": {
+        "technicalStatus": "not-verified",
+        "embedUrl": null,
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "external-source-link",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://www.arri.com/news-en/emmanuel-lubezki-asc-amc-on-birdman-"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    },
+    {
+      "id": "film-discovery-08",
+      "film": "The Revenant",
+      "year": 2015,
+      "director": "Alejandro González Iñárritu",
+      "cinematographers": [
+        "Emmanuel Lubezki"
+      ],
+      "sceneDescription": "Bear attack research target; official production page and teaser fallback",
+      "sourceUrl": "https://www.ilm.com/vfx/the-revenant/",
+      "videoTitle": "The Revenant — production page with official teaser link",
+      "publisher": "Industrial Light & Magic",
+      "publisherUrl": null,
+      "providerVideoId": null,
+      "thumbnailUrl": null,
+      "cameraTechnique": {
+        "value": "Apparent continuous camera movement; composited shot",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "source-page-reviewed",
+      "embedding": {
+        "technicalStatus": "not-verified",
+        "embedUrl": null,
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "external-source-link",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://www.ilm.com/vfx/the-revenant/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified.",
+        "Montage/production-page fallback, not a verified isolated scene."
+      ]
+    },
+    {
+      "id": "film-discovery-09",
+      "film": "La La Land",
+      "year": 2016,
+      "director": "Damien Chazelle",
+      "cinematographers": [
+        "Linus Sandgren"
+      ],
+      "sceneDescription": "City of Stars",
+      "sourceUrl": "https://www.youtube.com/watch?v=cZAw8qxn0ZE",
+      "videoTitle": "La La Land (2016 Movie) Official Clip – “City Of Stars”",
+      "publisher": "Lionsgate Movies",
+      "publisherUrl": "https://www.youtube.com/@LionsgateMovies",
+      "providerVideoId": "cZAw8qxn0ZE",
+      "thumbnailUrl": "https://i.ytimg.com/vi/cZAw8qxn0ZE/hqdefault.jpg",
+      "cameraTechnique": {
+        "value": "Sustained framing; static versus tracking classification pending",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "official-oembed-metadata-response",
+      "embedding": {
+        "technicalStatus": "oembed-returned-player",
+        "embedUrl": "https://www.youtube.com/embed/cZAw8qxn0ZE",
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "platform-embed-after-review",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://fest.afi.com/2016/galas-2016/la-la-land/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    },
+    {
+      "id": "film-discovery-10",
+      "film": "Vertigo",
+      "year": 1958,
+      "director": "Alfred Hitchcock",
+      "cinematographers": [
+        "Robert Burks"
+      ],
+      "sceneDescription": "Bell tower",
+      "sourceUrl": "https://www.youtube.com/watch?v=GjPCk494e5Q",
+      "videoTitle": "Vertigo (8/11) Movie CLIP - The Bell Tower (1958) HD",
+      "publisher": "Movieclips",
+      "publisherUrl": "https://www.youtube.com/@MOVIECLIPS",
+      "providerVideoId": "GjPCk494e5Q",
+      "thumbnailUrl": "https://i.ytimg.com/vi/GjPCk494e5Q/hqdefault.jpg",
+      "cameraTechnique": {
+        "value": "Dolly zoom: coupled translation and focal-length change",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "official-oembed-metadata-response",
+      "embedding": {
+        "technicalStatus": "oembed-returned-player",
+        "embedUrl": "https://www.youtube.com/embed/GjPCk494e5Q",
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "platform-embed-after-review",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://theasc.com/article/flashback-vertigo/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    },
+    {
+      "id": "film-discovery-11",
+      "film": "Goodfellas",
+      "year": 1990,
+      "director": "Martin Scorsese",
+      "cinematographers": [
+        "Michael Ballhaus"
+      ],
+      "sceneDescription": "Copacabana entrance",
+      "sourceUrl": "https://filmglossary.ccnmtl.columbia.edu/clip/copacabana/",
+      "videoTitle": "Copacabana",
+      "publisher": "Columbia Film Language Glossary",
+      "publisherUrl": null,
+      "providerVideoId": null,
+      "thumbnailUrl": null,
+      "cameraTechnique": {
+        "value": "Continuous following / Steadicam tracking",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "source-page-reviewed",
+      "embedding": {
+        "technicalStatus": "not-verified",
+        "embedUrl": null,
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "external-source-link",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://theasc.com/news/in-memoriam-michael-ballhaus-asc-1935-2017/"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    },
+    {
+      "id": "film-discovery-12",
+      "film": "The Matrix",
+      "year": 1999,
+      "director": "Lana and Lilly Wachowski",
+      "cinematographers": [
+        "Bill Pope"
+      ],
+      "sceneDescription": "Bullet time",
+      "sourceUrl": "https://www.youtube.com/watch?v=1wcTaimH9mI",
+      "videoTitle": "The Matrix | Bullet Time Scene | Warner Bros. Rewind",
+      "publisher": "Warner Bros. Rewind",
+      "publisherUrl": "https://www.youtube.com/@WarnerBrosRewind",
+      "providerVideoId": "1wcTaimH9mI",
+      "thumbnailUrl": "https://i.ytimg.com/vi/1wcTaimH9mI/hqdefault.jpg",
+      "cameraTechnique": {
+        "value": "Virtual orbit; not evidence of a physical orbiting camera",
+        "status": "unverified-for-selected-excerpt",
+        "basis": "research-target; no direct temporal analysis performed"
+      },
+      "sceneTimestampSeconds": null,
+      "timestampStatus": "not-verified",
+      "sourceVerification": "official-oembed-metadata-response",
+      "embedding": {
+        "technicalStatus": "oembed-returned-player",
+        "embedUrl": "https://www.youtube.com/embed/1wcTaimH9mI",
+        "playbackTested": false,
+        "publicDisplayApproved": false
+      },
+      "availableDisplayMethod": "source-link-only-pending-review",
+      "possibleDisplayMethod": "platform-embed-after-review",
+      "license": {
+        "name": null,
+        "status": "no-project-specific-permission-established",
+        "downloadExplicitlyPermitted": null,
+        "editingExplicitlyPermitted": null,
+        "publicHostingExplicitlyPermitted": null,
+        "thirdPartyAnalysisExplicitlyPermitted": null,
+        "permissionEvidence": []
+      },
+      "authorizedLocalProcessing": false,
+      "reviewStatus": "candidate",
+      "observations": [],
+      "inferences": [],
+      "confidence": "unverified",
+      "evidence": [
+        {
+          "kind": "research-source",
+          "url": "https://theasc.com/articles/flashback-the-matrix"
+        }
+      ],
+      "limitations": [
+        "Source metadata is not a grant of usage rights.",
+        "No source-relative timestamps or temporal classifications verified."
+      ]
+    }
+  ]
+}

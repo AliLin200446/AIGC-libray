@@ -1,0 +1,62 @@
+.recipes-page { background:var(--ff-paper);color:var(--ff-ink); }
+.recipes-page #app { max-width:1320px; }
+.recipe-meta { font:10px/1.7 'Courier New',monospace;letter-spacing:.045em;color:var(--ff-secondary); }
+.recipes-index,.recipe-detail { max-width:1060px;margin:54px auto 100px; }
+.recipes-index h1,.recipe-title h1 { font:clamp(32px,5vw,60px)/1.1 Georgia,serif;font-weight:400;letter-spacing:-.03em; }
+.recipe-title { margin:28px 0; }
+.recipe-description { max-width:630px;line-height:1.7;color:var(--ff-secondary); }
+.recipe-video { display:block;width:100%;max-height:68svh;object-fit:contain;background:var(--ff-surface); }
+.recipe-card { margin-top:60px;border-top:1px solid var(--ff-rule);padding-top:20px; }
+.recipe-card h2,.recipe-section h2 { font:28px/1.3 Georgia,serif;font-weight:400; }
+.recipe-section { border-top:1px solid var(--ff-rule);padding:30px 0;margin-top:36px; }
+.recipe-controls { padding:0;list-style-position:inside; }
+.recipe-controls li { padding:16px 0;border-bottom:1px solid var(--ff-rule); }
+.recipe-controls a { font:21px Georgia,serif;margin-right:20px; }
+.recipe-parameter { display:block;margin-top:5px;font:12px/1.6 monospace;color:var(--ff-secondary); }
+.recipe-prompt { white-space:pre-wrap;overflow-wrap:anywhere;padding:24px;border-left:1px solid var(--ff-rule-strong);background:var(--ff-surface);font:13px/1.8 'Courier New',monospace; }
+.recipe-copy { display:flex;gap:16px;align-items:center;flex-wrap:wrap; }
+.recipes-page button,.recipe-card > a { min-height:44px;background:none;border:0;border-bottom:1px solid var(--ff-rule-strong);padding:10px 0;font:11px monospace;color:var(--ff-moss);cursor:pointer; }
+.recipes-page button:disabled { opacity:.4;cursor:default; }
+.recipe-copy-fallback { width:100%;min-height:140px; }
+.recipe-empty,.recipe-awaiting { padding:65px 20px;margin-top:50px;border-block:1px solid var(--ff-rule);color:var(--ff-secondary);line-height:1.8; }
+.recipe-draft { border-left:2px solid var(--ff-rule-strong);padding:12px;font:11px/1.7 monospace;background:var(--ff-surface); }
+.remix-banner { padding:12px 36px;border-block:1px solid var(--ff-rule);font:10px/1.7 monospace;color:var(--ff-secondary);display:flex;gap:20px;align-items:center;flex-wrap:wrap; }
+.remix-banner details { font-size:9px;max-width:650px; }
+.remix-banner button { font:9px monospace; }
+.recipe-dev-form { display:grid;gap:14px;max-width:800px;margin:30px auto; }
+.recipe-dev-form label { display:grid;gap:6px;font:11px monospace; }
+.recipe-dev-form textarea { width:100%;min-height:160px;padding:14px;font:12px/1.6 monospace; }
+@media(max-width:700px) { .recipes-index,.recipe-detail { margin-top:32px; } .recipe-prompt { padding:16px;font-size:12px; } .recipe-video { max-height:60svh; } .remix-banner { padding:10px 22px;gap:10px; } .instrument-nav { flex-wrap:wrap; } }
+.instrument-nav .recipes-nav { font:10px 'Courier New',monospace;letter-spacing:.05em;color:var(--ff-moss);white-space:nowrap; }
+.remix-banner[hidden] { display:none; }
+.remix-banner { border-top-color:var(--ff-jade); }
+/* Public assembly sheets share the component archive's grid and typography. */
+.archive-page.recipes-page #app { max-width:1600px; }
+.archive-page .recipes-index,.archive-page .recipe-detail { max-width:none;margin:0; }
+.recipe-hero { display:grid;grid-template-columns:minmax(0,2.25fr) minmax(250px,1fr);gap:var(--ff-grid-gap);border-top:1px solid var(--ff-rule);padding-top:20px; }
+.recipe-result { margin:0;min-width:0; }
+.recipe-result figcaption { padding:12px 0;color:var(--ff-moss); }
+.recipe-hero aside .technical-action { display:inline-block;margin-top:20px; }
+.archive-page .recipe-video { background:var(--ff-media-surface); }
+.archive-page .recipe-section { margin-top:var(--ff-section-space);padding-top:22px; }
+.archive-page .recipe-section h2 { font:400 clamp(27px,3vw,42px)/1.05 var(--ff-display);letter-spacing:-.04em;margin-bottom:16px; }
+.archive-page .recipe-controls { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--ff-grid-gap);counter-reset:assembly;list-style:none;margin:30px 0; }
+.archive-page .recipe-controls li { counter-increment:assembly;border-top:1px solid var(--ff-rule);border-bottom:0;padding-top:16px;display:flex;flex-direction:column;align-items:start;gap:8px; }
+.archive-page .recipe-controls li::before { content:counter(assembly,decimal-leading-zero)' / COMPONENT';font:10px var(--ff-technical);color:var(--ff-moss); }
+.archive-page .recipe-controls a { font:30px var(--ff-display);letter-spacing:-.04em; }
+.archive-page .recipe-prompt { border:0;border-block:1px solid var(--ff-rule);background:none;padding:24px 0;max-width:900px;font:15px/1.8 var(--ff-interface); }
+.archive-page .recipe-copy { margin-top:20px; }
+.archive-page .recipe-remix { display:flex;align-items:start;gap:22px;flex-wrap:wrap; }
+.archive-page .recipe-remix p { max-width:420px;font-size:14px;color:var(--ff-moss); }
+.archive-page .recipe-remix button { margin-left:auto; }
+.archive-page .recipe-empty { grid-column:1/-1;padding:35px 0 65px;margin:0;border:0;max-width:640px; }
+.archive-page .recipe-empty h2 { font:400 clamp(30px,3.5vw,48px)/1.1 var(--ff-display);letter-spacing:-.04em;margin:24px 0;max-width:480px; }
+.archive-page .recipe-empty > p:not(.technical) { max-width:470px;font-size:14px; }
+.archive-page .recipe-empty a { display:inline-block;margin-top:28px; }
+.archive-page .recipe-awaiting { margin:0;min-height:340px;display:grid;place-items:center;background:var(--ff-media-surface);border:0;font:11px var(--ff-technical); }
+.archive-page .recipe-card { margin:0;border:0;padding:0; }
+.archive-page .recipe-card > .recipe-meta { padding:12px 0;border-top:1px solid var(--ff-rule); }
+.archive-page .recipe-card h2 { font:28px var(--ff-display);margin:20px 0; }
+@media(max-width:900px) { .recipe-hero { grid-template-columns:1fr; }.archive-page .recipe-controls { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) { .archive-page .recipe-controls { grid-template-columns:1fr; }.archive-page .recipe-remix { display:block; }.archive-page .recipe-remix button { margin-top:20px; }.recipe-grid { grid-template-columns:1fr; } }
+.archive-page .recipes-index > .catalog-family { border-top:1px solid var(--ff-rule); }

@@ -1,0 +1,31 @@
+/* Framefield pixel interactions R1. Loaded after pixel-theme.css. */
+.ff-fx-canvas { position:fixed;inset:0;pointer-events:none;z-index:2147483000; }
+.instrument-viewport { cursor:crosshair; }
+.ff-reticle,.ff-reticle-read { position:absolute;left:0;top:0;pointer-events:none;z-index:4;opacity:0;transition:opacity 120ms steps(2); }
+.ff-reticle { width:18px;height:18px;margin:-9px 0 0 -9px;background:linear-gradient(var(--ff-camera),var(--ff-camera)) 50% 50% / 4px 100% no-repeat,linear-gradient(var(--ff-camera),var(--ff-camera)) 50% 50% / 100% 4px no-repeat; }
+.ff-reticle-read { font:500 11px/1 var(--ff-technical);letter-spacing:.06em;white-space:pre;color:var(--ff-ink);background:var(--ff-paper);padding:4px 6px; }
+.instrument-viewport.ff-has-reticle .ff-reticle,.instrument-viewport.ff-has-reticle .ff-reticle-read { opacity:1; }
+.instrument-viewport::before,.instrument-viewport::after { transition:inset 160ms steps(2); }
+.instrument-viewport:hover::before,.instrument-viewport:hover::after { inset:12px; }
+.lens-tick { transition:transform 120ms steps(2); }
+.lens-tick[data-near="0"] { transform:translateY(calc(var(--ff-cell) * -2));background-color:var(--ff-ink) !important; }
+.lens-tick[data-near="1"] { transform:translateY(calc(var(--ff-cell) * -1)); }
+.lens-tick[data-near="2"] { transform:translateY(calc(var(--ff-cell) * -.5)); }
+.instrument-nav :is(a,button):not([aria-current="page"]):not(.is-active)::after {
+ content:"";position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:calc(var(--ff-cell) * 4 + 6px);height:var(--ff-cell);
+ background:linear-gradient(90deg,var(--ff-ink) 0 var(--ff-cell),transparent 0 calc(var(--ff-cell) + 2px),var(--ff-ink) 0 calc(var(--ff-cell) * 2 + 2px),transparent 0 calc(var(--ff-cell) * 2 + 4px),var(--ff-ink) 0 calc(var(--ff-cell) * 3 + 4px),transparent 0 calc(var(--ff-cell) * 3 + 6px),var(--ff-ink) 0);
+ clip-path:inset(0 100% 0 0);transition:clip-path 200ms steps(4);
+}
+.instrument-nav :is(a,button):not([aria-current="page"]):not(.is-active):is(:hover,:focus-visible)::after { clip-path:inset(0); }
+.instrument-control::before { transition:transform 80ms steps(1); }
+.instrument-control:active::before { transform:scale(.72); }
+.category-trigger .ff-px { transition:transform 160ms steps(2); }
+.category-trigger:hover .ff-px { transform:rotate(90deg); }
+.ff-pixnum.is-entering > * { transform-box:fill-box;transform-origin:center;animation:ff-cell-in 240ms steps(3) both;animation-delay:calc(var(--i,0) * 12ms); }
+@keyframes ff-cell-in { from { opacity:0;transform:scale(.25); } to { opacity:1;transform:scale(1); } }
+.lens-explore,.catalog-index-link { display:inline-flex;align-items:center; }
+.lens-explore:hover,.catalog-index-link:hover { color:var(--ff-camera); }
+@media(prefers-reduced-motion:reduce) {
+ .ff-fx-canvas { display:none; }
+ *,*::before,*::after { animation:none !important;transition:none !important; }
+}

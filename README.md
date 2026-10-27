@@ -2,7 +2,7 @@
 
 Visual Control Library for Generative Media
 
-Framefield turns camera, lens and composition concepts into visual, reusable controls for generative media. The homepage provides deterministic demonstrations; control pages connect visual intent with model translation and research evidence. Reference Analysis is experimental and unavailable in this first public static release. Human evaluation separates visible observations, inferences, uncertainty and reconstruction usefulness.
+Framefield turns camera, lens and composition concepts into visual, reusable controls for generative media. The homepage provides deterministic demonstrations; control pages connect visual intent with model translation and research evidence. Reference Analysis remains experimental and is available when its server-side OpenAI provider is configured. Human evaluation separates visible observations, inferences, uncertainty and reconstruction usefulness.
 
 See [production deployment](docs/deployment.md) for the Vercel configuration, domain setup and release checks. Research terminology and records are retained below.
 
@@ -69,8 +69,10 @@ Read [the production manual](docs/visual-study-protocol.md) before producing ass
 
 ## Reference Analysis provider
 
-Reference Mode now supports explicit image analysis through a server-side OpenAI Responses adapter. Configure `.env.local` using `.env.example`, then run the normal Vite development server. Without a key, the provider remains unavailable and images stay local. See [provider setup, limits, privacy and validation](docs/openai-reference-provider.md). The public static build disables analysis. `npm start` previews that static build locally; the provider remains available only through local development and the evaluation CLI.
+Reference Mode now supports explicit image analysis through a server-side OpenAI Responses adapter. Configure `.env.local` using `.env.example`, then run the normal Vite development server. Without a key, the provider remains unavailable and images stay local. See [provider setup, limits, privacy and validation](docs/openai-reference-provider.md). The Vercel Node endpoint reuses the existing provider and validator. `npm start` previews the production frontend and endpoint locally. See [production Reference Analysis](docs/production-reference-analysis.md) for setup and abuse-protection limits.
 
 ## Phase 5 — reference evaluation
 
 Use the [developer evaluation guide](docs/evaluation/reference-analysis-evaluation.md) and [12-slot checklist](docs/evaluation/reference-suite-template.md). `npm run reference-eval -- init` creates an empty private suite outside the repository. The runner analyzes one explicitly selected reference; offline review preserves separate observation, inference, uncertainty and control-mapping judgments. The internal product gate remains EXPERIMENTAL. No pilot assets or paid results are supplied.
+
+Curated database foundation: see [Reference curation](docs/reference-curation.md) for the development-only taxonomy, manual URL review workflow and approved-reference export.

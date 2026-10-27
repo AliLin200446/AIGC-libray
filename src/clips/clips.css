@@ -1,0 +1,47 @@
+.clips-page .clip-collection-note { border-block:1px solid var(--ff-rule);padding:16px 0;font:11px/1.7 var(--ff-technical);color:var(--ff-moss); }
+.clip-layout { display:grid;grid-template-columns:190px minmax(0,1fr);gap:var(--ff-grid-gap);margin-top:32px; }
+.clip-filters { min-width:0; }
+.clip-filter-help { font-size:12px;color:var(--ff-secondary);margin-top:12px !important; }
+.clip-filters fieldset { border:0;border-top:1px solid var(--ff-rule);padding:16px 0 20px;margin:20px 0 0;min-width:0; }
+.clip-filters legend { padding-right:12px;color:var(--ff-moss); }
+.clip-filters label { display:flex;align-items:center;gap:10px;min-height:36px;font-size:12px;cursor:pointer; }
+.clip-filters input { width:14px;height:14px;margin:0; }
+.clip-filters button:disabled { opacity:.45;cursor:default; }
+.clip-toolbar { display:flex;justify-content:space-between;gap:12px;min-height:40px;color:var(--ff-moss); }
+.clip-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 22px; }
+.clip-card { display:block;min-width:0; }
+.clips-page .clip-card:hover { text-decoration:none; }
+.clip-media { aspect-ratio:16/9;position:relative;overflow:hidden;background:var(--ff-media-surface); }
+.clip-media img,.clip-media video { display:block;width:100%;height:100%;object-fit:cover;position:absolute;inset:0; }
+.clip-media-status { position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);padding:4px 7px;background:var(--ff-overlay-paper);color:var(--ff-moss);font-size:9px;pointer-events:none; }
+.clip-media-status[hidden] { display:none; }
+.clip-caption { display:grid;grid-template-columns:1fr auto;gap:9px 12px;padding:14px 0 18px;border-bottom:1px solid var(--ff-rule);transition:border-color 240ms ease; }
+.clip-caption .technical { font-size:9px;color:var(--ff-moss); }
+.clip-caption h2 { font-size:24px;letter-spacing:-.04em;line-height:1.2; }
+.clip-caption p { grid-column:1/-1;font-size:12px;line-height:1.6;color:var(--ff-secondary); }
+.clip-arrow { transition:transform 240ms ease; }
+.clip-card:hover .clip-arrow,.clip-card:focus-visible .clip-arrow { transform:translate(3px,-3px); }
+.clip-card:hover .clip-caption { border-color:var(--ff-moss); }
+.clip-empty { grid-column:1/-1;padding:50px 0;min-height:350px; }
+.clip-empty p { margin:16px 0 !important;color:var(--ff-moss); }
+.clips-main > .back-link { display:inline-block;margin:24px 0 !important; }
+.clips-main > .clip-media { max-height:70vh;max-width:1100px;margin:0 auto; }
+.clips-main > .clip-media:has(video) .clip-media-status { bottom:60px; }
+.clip-detail-columns { display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,96px);margin-top:40px; }
+.clip-prompt { background:var(--ff-surface);padding:28px;align-self:start; }
+.clip-prompt > p:not(.technical):not(.clip-prompt-note) { font-size:20px;line-height:1.6;letter-spacing:-.02em;margin:24px 0;white-space:pre-wrap; }
+.clips-page .clip-copy { background:var(--ff-moss);color:var(--ff-paper);padding:13px 24px;width:100%;transition:background 240ms ease; }
+.clips-page .clip-copy:hover { background:var(--ff-ink); }
+.clip-prompt [role=status] { min-height:42px;padding-top:10px; }
+.clip-prompt-note { font-size:12px;color:var(--ff-secondary); }
+.clip-related { margin-top:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center; }
+.clip-related p { width:100%; }
+.clip-evidence { border-top:1px solid var(--ff-rule);margin-top:60px;padding-top:24px;max-width:900px; }
+.clip-evidence h3 { margin:24px 0 10px;font-size:18px; }
+.clip-evidence p { font-size:13px;line-height:1.8;color:var(--ff-secondary); }
+.clip-evidence a { display:inline-block;margin:12px 20px 0 0; }
+@media(max-width:1100px) { .clip-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .clip-layout { grid-template-columns:170px minmax(0,1fr); } }
+@media(max-width:700px) { .clip-layout { grid-template-columns:1fr; } .clip-filters { display:grid;grid-template-columns:1fr 1fr;gap:0 20px; } .clip-filters>h2,.clip-filter-help { grid-column:1/-1; } .clip-grid { grid-template-columns:1fr; } .clip-detail-columns { grid-template-columns:1fr; } .clip-filters > button { grid-column:1/-1;justify-self:start; } .clips-page .archive-header { flex-wrap:wrap;gap:8px 20px;padding:16px 0; } .clips-page .archive-header nav { gap:20px; } .clips-page .archive-edition { display:none; } .clip-prompt { padding:22px; } }
+@media(prefers-reduced-motion:reduce) { .clips-page *, .clips-page *::before, .clips-page *::after { transition:none !important;scroll-behavior:auto !important; } }
+
+.clips-main > .clip-media video { object-fit:contain; }

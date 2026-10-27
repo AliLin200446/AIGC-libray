@@ -49,7 +49,9 @@ export function configurationPanel(control: ControlSpecification, state: Control
       inputs.push({ reset: () => { slider.value = String(state.parameters[parameter.id]); output.value = `${slider.value} ${parameter.unit}`; } });
     }
     input.id = `parameter-${parameter.id}`; input.setAttribute('aria-describedby', description.id);
-    field.prepend(label); field.append(input, description); fields.append(field);
+    field.prepend(label); field.append(input);
+    if(parameter.kind==='number') { const scale=el('div','parameter-scale'); scale.setAttribute('aria-hidden','true'); scale.append(el('span','',String(parameter.min)),el('span','',String(parameter.max)+' '+parameter.unit));field.append(scale); }
+    field.append(description); fields.append(field);
   }
   form.append(fields, button('Reset configuration', () => {
     Object.assign(state.parameters, defaultConfiguration(control).parameters);

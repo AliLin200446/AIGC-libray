@@ -1,5 +1,7 @@
 # FRAMEFIELD public release
 
+**Reference enablement update:** the code now includes a Vercel Node function for experimental analysis. The original static-only release notes below are historical for Reference behavior, environment variables and API routing. Follow [production Reference Analysis](production-reference-analysis.md) for the current configuration and verified deployment state.
+
 Target domain: `https://framefield.alilinlab.com`.
 
 ## Hosting choice and current status

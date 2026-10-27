@@ -1,0 +1,37 @@
+/* FRAMEFIELD — ink, moss and jade. Media pixels are never themed. */
+:root {
+  --ff-ink: #20211E;
+  --ff-moss: #46503A;
+  --ff-jade: #75845D;
+  --ff-muted-moss: #62704C;
+  --ff-paper: #F6F5EF;
+  --ff-surface: #EEEEE5;
+  --ff-surface-deep: #D9DDCE;
+  --ff-secondary: #53594A;
+  --ff-rule: color-mix(in srgb, var(--ff-ink) 18%, transparent);
+  --ff-rule-strong: color-mix(in srgb, var(--ff-moss) 45%, transparent);
+  --ff-overlay-paper: color-mix(in srgb, var(--ff-paper) 94%, transparent);
+  --ff-accent-wash: color-mix(in srgb, var(--ff-jade) 12%, var(--ff-paper));
+  --ff-scene-field: #D9DDCE;
+  --ff-scene-stone: #BCBCAF;
+  --ff-scene-ground: #C5C9B6;
+  --ff-scene-wall: var(--ff-jade);
+  --ff-scene-recess: var(--ff-muted-moss);
+  --ff-scene-subject: var(--ff-moss);
+  /* Existing illumination, kept unchanged during the palette pass. */
+  --ff-light-day: #FFFFFF;
+  --ff-light-warm: #FFF7E9;
+}
+::selection { color:var(--ff-ink);background:var(--ff-accent-wash); }
+
+/* Shared document system. Media fields surround evidence without modifying it. */
+:root {
+  --ff-media-surface: #E8EBE1;
+  --ff-display: Arial, Helvetica, sans-serif;
+  --ff-interface: Arial, Helvetica, sans-serif;
+  --ff-technical: 'Courier New', monospace;
+  --ff-type-meta: 11px;
+  --ff-grid-gap: clamp(18px, 2.4vw, 38px);
+  --ff-section-space: clamp(56px, 7vw, 112px);
+  --ff-page-gutter: clamp(20px, 4vw, 64px);
+}

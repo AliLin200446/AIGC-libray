@@ -1,9 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
+import { clips } from '../src/clips/data';
 import { controls } from '../src/controls';
-const detailPaths = new Set(controls.map(c => `/library/${c.id}`));
-const mime: Record<string,string> = { '.js':'text/javascript', '.css':'text/css', '.html':'text/html', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.xml':'application/xml', '.txt':'text/plain' };
+const detailPaths = new Set([...controls.map(c => `/library/${c.id}`), '/clips', ...clips.map(c => `/clips/${c.id}`)]);
+const mime: Record<string,string> = { '.js':'text/javascript', '.css':'text/css', '.html':'text/html', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.xml':'application/xml', '.txt':'text/plain', '.mp4':'video/mp4', '.webm':'video/webm' };
 export function staticSite(directory: string) {
   const root = resolve(directory);
   return async (req: IncomingMessage, res: ServerResponse) => {
@@ -14,7 +15,7 @@ export function staticSite(directory: string) {
       const pathname = decodeURIComponent(url.pathname);
       if (pathname === '/library' || pathname === '/library/') { res.writeHead(301, { ...headers, Location: '/' + url.search }); res.end(); return; }
       const clean = pathname.replace(/\/$/, '');
-      const route = pathname === '/' ? '/index.html' : detailPaths.has(clean) ? `${clean}/index.html` : pathname;
+      const route = pathname === '/' ? '/index.html' : (clean==='/index'||detailPaths.has(clean)||/^\/clips\/pexels-[1-9]\d*$/.test(clean)||/^\/recipes(?:\/[-a-z0-9]+)?$/.test(clean)) ? `${clean}/index.html` : pathname;
       let file = resolve(root, '.' + route), status = 200;
       if (!file.startsWith(root + sep) || pathname.startsWith('/dev/') || pathname.startsWith('/api/')) { file = resolve(root, '404.html'); status = 404; }
       try { if (!(await stat(file)).isFile()) throw new Error('Not a file'); } catch { file = resolve(root, '404.html'); status = 404; }

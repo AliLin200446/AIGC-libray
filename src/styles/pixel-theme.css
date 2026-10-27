@@ -1,0 +1,405 @@
+/* ==========================================================================
+   Framefield — Pixel theme (R1)
+   White ground + dot grid; pixels are instrument marks, one module per
+   control family. Import AFTER the existing stylesheets so these win.
+   ========================================================================== */
+
+/* ---------- 1. Tokens: override the existing --ff-* set ------------------ */
+:root {
+  /* ground + ink */
+  --ff-paper: #fbfbfa;
+  --ff-surface: #ffffff;
+  --ff-surface-deep: #e9eae6;
+  --ff-ink: #141514;
+  --ff-secondary: #4a4e49;          /* 8.6:1 on paper — safe for small mono */
+  --ff-moss: #141514;               /* was used for strong rules → ink */
+  --ff-jade: #0f8a5f;               /* repurposed: composition green */
+  --ff-muted-moss: #4a4e49;
+  --ff-rule: #e4e6e2;
+  --ff-rule-strong: #141514;
+  --ff-overlay-paper: color-mix(in srgb, var(--ff-paper) 94%, transparent);
+  --ff-accent-wash: #f1f2ef;
+  --ff-media-surface: #e9eae6;
+
+  /* three.js study scene — neutral clay, no more olive */
+  --ff-scene-field: #e9eae6;
+  --ff-scene-wall: #e9eae6;
+  --ff-scene-recess: #dcddd8;
+  --ff-scene-ground: #f4f4f1;
+  --ff-scene-stone: #d0d2cc;
+  --ff-scene-subject: #2b2d2a;
+
+  /* type */
+  --ff-display: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --ff-interface: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --ff-technical: "Geist Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* NEW — control-family accents (one module each) */
+  --ff-lens: #d6338a;               /* ring   — fill only, 3.9:1, never text */
+  --ff-composition: #0f8a5f;        /* checker — 4.6:1, text-safe */
+  --ff-camera: #1f6fd6;             /* cross  — 4.9:1, text-safe, links/hover */
+  --ff-failure: #e2492f;            /* strike — fill only, never text */
+
+  /* NEW — pixel metrics */
+  --ff-cell: 4px;                   /* base pixel; every mark is a multiple */
+  --ff-dot: #c8cbc6;
+  --ff-dot-step: 24px;
+  --ff-ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+/* ---------- 2. Ground: dot grid on the page, solid on chrome ------------- */
+html, body {
+  background-color: var(--ff-paper);
+}
+body {
+  background-image: radial-gradient(circle, var(--ff-dot) 1.1px, transparent 1.6px);
+  background-size: var(--ff-dot-step) var(--ff-dot-step);
+  background-position: calc(var(--ff-dot-step) / 2) calc(var(--ff-dot-step) / 2);
+  color: var(--ff-ink);
+  font-family: var(--ff-interface);
+}
+/* chrome + reading surfaces sit on solid ground so text never crosses dots */
+.instrument-header,
+.archive-header,
+.instrument-footer,
+.compose-tools,
+.compose-precision,
+.instrument-index,
+.control-document > section {
+  background-color: var(--ff-paper);
+}
+.instrument-header,
+.archive-header { border-bottom: 1px solid var(--ff-rule); }
+.instrument-footer { border-top: 1px solid var(--ff-rule); }
+
+a { color: var(--ff-ink); }
+a:hover { color: var(--ff-camera); }
+
+/* ---------- 3. Pixel modules (reusable) --------------------------------- */
+.ff-px { display: inline-block; width: 16px; aspect-ratio: 1; flex: none; vertical-align: middle; }
+.ff-px--ink  { background: var(--ff-ink); }
+.ff-px--ring {
+  background: radial-gradient(circle at 50% 50%,
+    var(--ff-lens) 0 22%, transparent 23% 39%, var(--ff-lens) 40% 49%, transparent 50%);
+}
+.ff-px--ring-core {
+  background: radial-gradient(circle at 50% 50%,
+    var(--ff-camera) 0 30%, var(--ff-lens) 31% 49%, transparent 50%);
+}
+.ff-px--checker {
+  background: conic-gradient(var(--ff-composition) 0 25%, transparent 0 50%,
+    var(--ff-composition) 0 75%, transparent 0) 0 0 / 50% 50%;
+}
+.ff-px--cross {
+  background:
+    linear-gradient(var(--ff-camera), var(--ff-camera)) 50% 50% / 24% 100% no-repeat,
+    linear-gradient(var(--ff-camera), var(--ff-camera)) 50% 50% / 100% 24% no-repeat;
+}
+.ff-px--strike {
+  background:
+    linear-gradient(45deg, transparent 40%, var(--ff-failure) 40% 60%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, var(--ff-failure) 40% 60%, transparent 60%);
+}
+
+/* pixel numerals (rendered by pixel.ts as SVG) */
+.ff-pixnum { display: block; height: auto; shape-rendering: crispEdges; }
+.ff-pixnum .c-ring { fill: none; stroke: var(--ff-lens); }
+.ff-pixnum .c-ring-dot { fill: var(--ff-lens); }
+.ff-pixnum .c-core { fill: var(--ff-camera); }
+.ff-pixnum .c-ink { fill: var(--ff-ink); }
+
+/* wordmark glyph */
+.ff-logo { display: inline-grid; grid-template-columns: repeat(5, 5px); gap: 1px; margin-right: 12px; vertical-align: middle; }
+.ff-logo i { display: block; width: 5px; height: 5px; }
+.ff-logo i.on { background: var(--ff-ink); }
+.ff-logo i.core { background: var(--ff-lens); }
+
+/* ---------- 4. Header / nav --------------------------------------------- */
+.wordmark {
+  display: inline-flex; align-items: center;
+  font-family: var(--ff-interface); font-weight: 600; letter-spacing: .06em;
+}
+.instrument-nav a,
+.archive-header nav a,
+.index-toggle {
+  font-family: var(--ff-technical); font-size: 12px; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ff-secondary);
+  min-height: 44px; display: inline-flex; align-items: center; position: relative;
+  text-decoration: none; border: 0; background: none;
+}
+.instrument-nav a:hover,
+.index-toggle:hover { color: var(--ff-ink); }
+/* active item: a 4-cell pixel underline, last cell in lens pink */
+.instrument-nav [aria-current="page"],
+.instrument-nav .is-active,
+.archive-header nav [aria-current="page"] { color: var(--ff-ink); }
+.instrument-nav [aria-current="page"]::after,
+.instrument-nav .is-active::after {
+  content: ""; position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%);
+  width: calc(var(--ff-cell) * 4 + 6px); height: var(--ff-cell);
+  background:
+    linear-gradient(90deg,
+      var(--ff-ink) 0 var(--ff-cell), transparent 0 calc(var(--ff-cell) + 2px),
+      var(--ff-ink) 0 calc(var(--ff-cell) * 2 + 2px), transparent 0 calc(var(--ff-cell) * 2 + 4px),
+      var(--ff-ink) 0 calc(var(--ff-cell) * 3 + 4px), transparent 0 calc(var(--ff-cell) * 3 + 6px),
+      var(--ff-lens) 0);
+}
+
+/* ---------- 5. Viewport frame: pixel corner brackets --------------------- */
+.instrument-viewport { position: relative; background: var(--ff-scene-field); }
+.instrument-viewport::before,
+.instrument-viewport::after {
+  content: ""; position: absolute; inset: 16px; pointer-events: none; z-index: 3;
+  --l: 28px; --t: 6px; --k: var(--ff-ink);
+  background:
+    linear-gradient(var(--k), var(--k)) 0 0 / var(--l) var(--t) no-repeat,
+    linear-gradient(var(--k), var(--k)) 0 0 / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--k), var(--k)) 100% 0 / var(--l) var(--t) no-repeat,
+    linear-gradient(var(--k), var(--k)) 100% 0 / var(--t) var(--l) no-repeat;
+}
+.instrument-viewport::after {
+  background:
+    linear-gradient(var(--k), var(--k)) 0 100% / var(--l) var(--t) no-repeat,
+    linear-gradient(var(--k), var(--k)) 0 100% / var(--t) var(--l) no-repeat,
+    linear-gradient(var(--k), var(--k)) 100% 100% / var(--l) var(--t) no-repeat,
+    linear-gradient(var(--k), var(--k)) 100% 100% / var(--t) var(--l) no-repeat;
+}
+
+/* ---------- 6. Composition guides: dashed pixel lines -------------------- */
+.instrument-guides .guide-v {
+  width: var(--ff-cell); border: 0;
+  background: repeating-linear-gradient(to bottom,
+    var(--ff-composition) 0 var(--ff-cell), transparent var(--ff-cell) calc(var(--ff-cell) * 3));
+}
+.instrument-guides .guide-h {
+  height: var(--ff-cell); border: 0;
+  background: repeating-linear-gradient(to right,
+    var(--ff-composition) 0 var(--ff-cell), transparent var(--ff-cell) calc(var(--ff-cell) * 3));
+}
+.instrument-guides .guide-anchor {
+  width: 16px; height: 16px; border: 0; border-radius: 0;
+  background: conic-gradient(var(--ff-composition) 0 25%, transparent 0 50%,
+    var(--ff-composition) 0 75%, transparent 0) 0 0 / 50% 50%;
+  transform: translate(-50%, -50%);
+}
+.instrument-guides .guide-space {
+  background: repeating-linear-gradient(45deg,
+    color-mix(in srgb, var(--ff-composition) 16%, transparent) 0 4px, transparent 4px 10px);
+  border: 0;
+}
+
+/* ---------- 7. Readouts ------------------------------------------------- */
+.instrument-readout,
+.technical-annotation,
+.orbit-annotation,
+.lens-unit,
+.lens-index,
+.lens-sound,
+.lens-explore,
+.framing-lock,
+.home-reset {
+  font-family: var(--ff-technical);
+  font-size: 12px; font-weight: 500; letter-spacing: .06em;
+  color: var(--ff-ink);
+}
+.technical-annotation, .orbit-annotation, .lens-index, .lens-sound { color: var(--ff-secondary); }
+/* chromatic fringe — ONLY on the lens readout (aberration is a lens behavior) */
+.instrument-readout .focal-number,
+.lens-value {
+  text-shadow: -1px 0 rgb(31 111 214 / .7), 1px 0 rgb(226 73 47 / .7);
+}
+.framing-lock, .home-reset, .lens-sound {
+  min-height: 44px; padding: 0 4px; border: 0; background: none; cursor: pointer;
+}
+.framing-lock:hover, .home-reset:hover, .lens-explore:hover { color: var(--ff-camera); }
+
+/* ---------- 8. Lens ruler: square pixel ticks + ring marker -------------- */
+.lens-tick {
+  width: var(--ff-cell); height: var(--ff-cell);
+  background: #9a9e98; border: 0;
+}
+.lens-tick.medium {
+  height: calc(var(--ff-cell) * 2 + 2px);
+  background: linear-gradient(var(--ff-ink) 0 var(--ff-cell), transparent 0 calc(var(--ff-cell) + 2px), #9a9e98 0);
+}
+.lens-tick.major {
+  height: calc(var(--ff-cell) * 3 + 4px);
+  background: linear-gradient(var(--ff-ink) 0 calc(var(--ff-cell) * 2 + 2px), transparent 0 calc(var(--ff-cell) * 2 + 4px), #9a9e98 0);
+}
+/* active focal marker — existing element that marks the current value */
+.lens-ruler [aria-current],
+.lens-ruler .is-current,
+.lens-ruler .lens-indicator {
+  width: 12px; height: 40px; border: 0;
+  background:
+    radial-gradient(circle at 50% 50%, var(--ff-lens) 0 22%, transparent 23% 39%, var(--ff-lens) 40% 49%, transparent 50%) 0 0 / 12px 12px no-repeat,
+    radial-gradient(circle at 50% 50%, var(--ff-lens) 0 22%, transparent 23% 39%, var(--ff-lens) 40% 49%, transparent 50%) 0 14px / 12px 12px no-repeat,
+    radial-gradient(circle at 50% 50%, var(--ff-camera) 0 30%, var(--ff-lens) 31% 49%, transparent 50%) 0 28px / 12px 12px no-repeat;
+  transition: left 360ms var(--ff-ease), transform 360ms var(--ff-ease);
+}
+
+/* ---------- 9. Edge triggers + option lists ----------------------------- */
+.category-trigger {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 44px; border: 0; background: none; cursor: pointer;
+  font-family: var(--ff-technical); font-size: 12px; font-weight: 500;
+  letter-spacing: .08em; color: var(--ff-ink);
+}
+.category-trigger .ff-px { width: 16px; }
+.instrument-control {
+  display: flex; align-items: center; gap: 12px; min-height: 44px;
+  border: 0; background: none; padding: 0; cursor: pointer; text-align: left;
+  font-family: var(--ff-interface); font-size: 15px; color: var(--ff-secondary);
+}
+.instrument-control::before {
+  content: ""; width: 14px; height: 14px; flex: none;
+  box-shadow: inset 0 0 0 2px #c9ccc7;
+}
+.instrument-control:hover { color: var(--ff-ink); }
+.instrument-control[aria-pressed="true"],
+.instrument-control[aria-checked="true"],
+.instrument-control.is-active { color: var(--ff-ink); font-weight: 500; }
+.zone-composition .instrument-control[aria-pressed="true"]::before,
+.zone-composition .instrument-control[aria-checked="true"]::before,
+.zone-composition .instrument-control.is-active::before {
+  box-shadow: none;
+  background: conic-gradient(var(--ff-composition) 0 25%, transparent 0 50%, var(--ff-composition) 0 75%, transparent 0) 0 0 / 50% 50%;
+}
+.zone-camera .instrument-control[aria-pressed="true"]::before,
+.zone-camera .instrument-control[aria-checked="true"]::before,
+.zone-camera .instrument-control.is-active::before {
+  box-shadow: none;
+  background:
+    linear-gradient(var(--ff-camera), var(--ff-camera)) 50% 50% / 24% 100% no-repeat,
+    linear-gradient(var(--ff-camera), var(--ff-camera)) 50% 50% / 100% 24% no-repeat;
+}
+.zone-lens .instrument-control[aria-pressed="true"]::before,
+.zone-lens .instrument-control.is-active::before {
+  box-shadow: none;
+  background: radial-gradient(circle at 50% 50%, var(--ff-lens) 0 22%, transparent 23% 39%, var(--ff-lens) 40% 49%, transparent 50%);
+}
+
+/* ---------- 10. Caption block ------------------------------------------- */
+.instrument-caption .active-name,
+.instrument-caption h1 {
+  font-family: var(--ff-display); font-weight: 500;
+  font-size: clamp(32px, 4.2vw, 52px); line-height: 1; letter-spacing: -.03em;
+}
+.instrument-caption .active-description { color: var(--ff-secondary); font-size: 17px; line-height: 1.5; }
+.ff-caption-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; }
+.ff-focal-pix { display: flex; align-items: flex-end; gap: 14px; }
+.ff-focal-pix .ff-pixnum { width: clamp(96px, 12vw, 158px); }
+.ff-focal-pix small { display: flex; flex-direction: column; gap: 4px; font: 500 11px/1.2 var(--ff-technical); color: var(--ff-secondary); }
+.ff-focal-pix small b { font-size: 13px; color: var(--ff-ink); }
+
+/* ---------- 11. Library / control documents ----------------------------- */
+.archive-title h1 { margin: 0; }
+.archive-title h1 .ff-pixnum { width: clamp(220px, 40vw, 580px); }
+.control-document h2,
+.control-document .technical {
+  font-family: var(--ff-technical); font-size: 12px; font-weight: 500; letter-spacing: .08em;
+}
+.control-document dl > div {
+  border-bottom: 1px solid var(--ff-rule);
+}
+.ff-section-no { color: var(--ff-ink); margin-right: .4em; }
+.ff-badge {
+  font: 500 11px/1 var(--ff-technical); letter-spacing: .06em; padding: 4px 8px;
+  background: var(--ff-ink); color: var(--ff-paper);
+}
+.ff-badge--outline { background: none; color: var(--ff-ink); box-shadow: inset 0 0 0 1px var(--ff-ink); }
+.ff-failure-list li { display: flex; gap: 16px; align-items: flex-start; }
+.ff-failure-list li::before {
+  content: ""; width: 16px; height: 16px; flex: none; margin-top: 3px;
+  background:
+    linear-gradient(45deg, transparent 40%, var(--ff-failure) 40% 60%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, var(--ff-failure) 40% 60%, transparent 60%);
+}
+.control-document input[type="range"] { accent-color: var(--ff-lens); min-height: 44px; }
+
+/* ---------- 12. Motion + a11y ------------------------------------------- */
+:focus-visible { outline: 2px solid var(--ff-camera); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}
+
+/* ---------- 13. Phone ----------------------------------------------------- */
+@media (max-width: 720px) {
+  :root { --ff-dot-step: 20px; }
+  .instrument-viewport::before, .instrument-viewport::after { inset: 12px; --l: 22px; --t: 5px; }
+  .ff-focal-pix .ff-pixnum { width: 82px; }
+}
+/* R1 adapters for the current vanilla DOM (legacy route specificity). */
+body.library-app {
+  background-image: radial-gradient(circle,var(--ff-dot) 1.1px,transparent 1.6px);
+  background-size:var(--ff-dot-step) var(--ff-dot-step);
+  background-position:calc(var(--ff-dot-step)/2) calc(var(--ff-dot-step)/2);
+  font-family:var(--ff-interface);
+}
+.archive-title,.archive-footer,.instrument-caption,.clip-admin,.filter-sidebar,
+.control-spec,.catalog-section,.clip-detail,.reference-panel { background-color:var(--ff-paper); }
+.instrument-page .category-trigger,.instrument-page .index-toggle,.instrument-page .home-reset,
+.instrument-footer,.caption-control,.instrument-explore,.lens-tick span,.library-app .eyebrow { font-family:var(--ff-technical); }
+.instrument-page .category-trigger { font-size:12px;letter-spacing:.08em; }
+.category-trigger::before,.category-trigger::after { display:none; }
+.instrument-control[aria-current=true] { background:none; }
+.instrument-control.is-active { color:var(--ff-ink); }
+.zone-controls:has([aria-current=true]) .instrument-control:not([aria-current=true]) { opacity:1; }
+.instrument-guides[data-control=centered] .guide-anchor,.instrument-guides .guide-checker {
+  width:16px;height:16px;border:0;border-radius:0;opacity:1;
+  background:conic-gradient(var(--ff-composition) 0 25%,transparent 0 50%,var(--ff-composition) 0 75%,transparent 0) 0 0 / 50% 50%;
+  transform:translate(-50%,-50%);
+}
+.instrument-guides .guide-v,.instrument-guides .guide-h { opacity:1; }
+.instrument-guides[data-control=rule-of-thirds] .guide-checker { display:block; }
+.guide-checker.a { left:33.3333%;top:33.3333%; }.guide-checker.b { left:66.6667%;top:33.3333%; }
+.guide-checker.c { left:33.3333%;top:66.6667%; }.guide-checker.d { left:66.6667%;top:66.6667%; }
+.instrument-guides[data-control=negative-space] .guide-space { border:0;background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--ff-composition) 16%,transparent) 0 4px,transparent 4px 10px); }
+.instrument-caption.ff-caption-row { display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 20px; }
+.ff-focal-pix { grid-column:2;grid-row:1 / 4;align-self:center; }
+.instrument-caption .instrument-explore { grid-column:1;grid-row:4;justify-self:start; }
+.lens-indicator { transform:translateX(-50%); }
+.lens-scale .lens-tick.major span { top:22px; }
+.archive-header nav [aria-current=page] { text-decoration:none; }
+.archive-header nav [aria-current=page]::after { content:'';position:absolute;left:0;bottom:4px;width:22px;height:4px;background:linear-gradient(90deg,var(--ff-ink) 0 4px,transparent 4px 6px,var(--ff-ink) 6px 10px,transparent 10px 12px,var(--ff-ink) 12px 16px,transparent 16px 18px,var(--ff-lens) 18px); }
+.ff-failure-list { list-style:none;padding-left:0; }
+body :is(button,select,input:not([type=checkbox]):not([type=radio]),summary,a) { min-height:44px; }
+body a { display:inline-flex;align-items:center; }
+body :is(button,select,summary,a,[role=slider]) { min-width:44px; }
+body :focus-visible { outline:2px solid var(--ff-camera);outline-offset:2px; }
+.instrument-header,.archive-header { flex-wrap:wrap;height:auto; }
+.archive-title h1 .ff-pixnum { max-width:100%; }
+@media(max-width:720px){
+ .instrument-header { padding:16px 20px;gap:8px; }
+ .instrument-header .wordmark { font-size:12px; }
+ .ff-logo { margin-right:8px; }
+ .instrument-nav { flex-wrap:wrap;gap:10px; }
+ .instrument-caption .active-name { font-size:30px; }
+ .instrument-caption .active-description { font-size:14px; }
+ .instrument-surface { padding-bottom:380px; }
+ .zone-lens,.zone-camera,.zone-composition { top:calc(100% + 210px);padding:8px 0; }
+ .instrument-page .category-trigger { font-size:10px;gap:5px; }
+ .zone-controls .instrument-control { white-space:normal;font-size:12px;gap:5px; }
+ .archive-header { gap:8px; }.archive-header nav { flex-wrap:wrap;gap:12px; }
+ .archive-title h1 .ff-pixnum { width:min(100%,580px); }
+}
+.lens-instrument,.discovery-zone .zone-controls,.category-trigger { background-color:var(--ff-paper); }
+.instrument-nav button { position:relative;font:500 12px var(--ff-technical);letter-spacing:.08em; }
+.instrument-nav button[aria-current=page] { border-bottom:0; }
+.instrument-page .lens-sound,.lens-explore,.lens-value,.lens-unit { font-family:var(--ff-technical); }
+.library-app :focus-visible { outline:2px solid var(--ff-camera);outline-offset:2px; }
+/* The live viewport is an absolute child of an aspect-ratio frame. */
+.instrument-frame > .instrument-viewport { position:absolute;inset:0; }
+.instrument-nav button[aria-current=page] { text-decoration:none; }
+.instrument-page .category-trigger { background-color:var(--ff-paper); }
+@media(min-width:721px){
+ .instrument-surface { padding-bottom:190px; }
+}
+.catalog-family,.catalog-toolbar,.clip-filters,.clip-caption,.clip-toolbar,.clip-collection-note,
+.clip-detail-columns,.clip-evidence,.recipe-detail > section,.control-document > .back-link {
+  background-color:var(--ff-paper);
+}
+.library-app label:has(input[type=checkbox]),.library-app label:has(input[type=radio]) { min-height:44px;display:flex;align-items:center; }
+
+.wordmark, .lens-explore, .catalog-index-link { text-decoration: none; }

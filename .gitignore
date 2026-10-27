@@ -9,3 +9,14 @@ local-reference-suite/*
 reference-evaluation/
 
 .vercel/
+server-build/
+
+# Private recipe source media; published artifacts are explicitly verified at build time.
+local-recipes/
+
+# Private candidate queues, permission evidence and unreleased media.
+local-clip-ingestion/
+.clip-release-*/
+
+# Private film-reference review decisions and permission evidence.
+local-film-references/

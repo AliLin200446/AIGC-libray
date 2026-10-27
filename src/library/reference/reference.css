@@ -1,23 +1,23 @@
 .instrument-nav { display:flex; align-items:center; gap:24px; }
 .instrument-page .instrument-nav button { font:11px 'Courier New',monospace; letter-spacing:.07em; }
 .instrument-nav [aria-pressed=true] { text-decoration:underline; text-underline-offset:5px; }
-.reference-layer { position:absolute; inset:0; display:grid; place-items:center; background:#e8e7e0; overflow:hidden; }
-.reference-layer[data-dragging=true] { outline:1px solid #48594d; outline-offset:-10px; }
+.reference-layer { position:absolute; inset:0; display:grid; place-items:center; background:var(--ff-surface); overflow:hidden; }
+.reference-layer[data-dragging=true] { outline:1px solid var(--ff-moss); outline-offset:-10px; }
 .reference-layer[hidden], .reference-panel[hidden], .reference-empty[hidden], .reference-image-plane[hidden], .reference-fixture-badge[hidden] { display:none; }
 .reference-empty { display:flex; flex-direction:column; align-items:center; gap:18px; text-align:center; padding:24px; }
 .reference-empty h2 { font:clamp(28px,4vw,48px)/1.15 Georgia,serif; letter-spacing:-.03em; margin:0; }
-.reference-empty p { font:14px/1.5 Arial,sans-serif; color:#5c655e; }
-.reference-meta { font:10px/1.6 'Courier New',monospace; letter-spacing:.075em; color:#59665e; }
+.reference-empty p { font:14px/1.5 Arial,sans-serif; color:var(--ff-moss); }
+.reference-meta { font:10px/1.6 'Courier New',monospace; letter-spacing:.075em; color:var(--ff-moss); }
 .reference-choose { font:11px 'Courier New',monospace; cursor:pointer; text-decoration:underline; text-underline-offset:4px; }
 .reference-file { position:absolute; width:1px; height:1px; opacity:0; }
-.reference-empty:has(.reference-file:focus-visible) .reference-choose { outline:2px solid #415c4b; outline-offset:6px; }
+.reference-empty:has(.reference-file:focus-visible) .reference-choose { outline:2px solid var(--ff-moss); outline-offset:6px; }
 .reference-image-plane { position:relative; }
 .reference-image-plane img, .reference-image-plane svg { position:absolute; inset:0; width:100%; height:100%; }
 .reference-image-plane img { object-fit:contain; }
-.reference-image-plane svg { pointer-events:none; fill:none; stroke:#f7faf1; stroke-width:1.1; filter:drop-shadow(0 1px 1px #27352d); }
+.reference-image-plane svg { pointer-events:none; fill:none; stroke:var(--ff-paper); stroke-width:1.1; filter:drop-shadow(0 1px 1px var(--ff-ink)); }
 .reference-image-plane svg * { vector-effect:non-scaling-stroke; }
-.reference-image-plane rect { fill:#f7faf1; fill-opacity:.08; stroke-dasharray:4 5; }
-.reference-fixture-badge { position:absolute; top:12px; left:12px; max-width:calc(100% - 24px); padding:5px 7px; background:#f7f8f6; color:#283f30; font:10px 'Courier New',monospace; }
+.reference-image-plane rect { fill:var(--ff-paper); fill-opacity:.08; stroke-dasharray:4 5; }
+.reference-fixture-badge { position:absolute; top:12px; left:12px; max-width:calc(100% - 24px); padding:5px 7px; background:var(--ff-paper); color:var(--ff-ink); font:10px 'Courier New',monospace; }
 .reference-open .instrument-surface { flex:0; min-height:0; padding:36px 0 0; }
 .reference-open .instrument-frame { width:66vw; min-width:0; max-width:1200px; }
 .reference-open .instrument-frame { scroll-margin-top:24px; }
@@ -40,16 +40,16 @@
 .reference-panel button:disabled { opacity:.45; cursor:default; }
 .reference-panel [aria-pressed=true] { text-decoration:underline; text-underline-offset:5px; }
 .reference-status { font:12px/1.7 'Courier New',monospace; margin:22px 0 6px; }
-.reference-note { font:12px/1.65 Arial,sans-serif; color:#5b655e; margin:6px 0; }
-.reference-error:not(:empty) { color:#883e2c; font:13px/1.6 Arial,sans-serif; border-left:1px solid currentColor; padding-left:12px; }
+.reference-note { font:12px/1.65 Arial,sans-serif; color:var(--ff-moss); margin:6px 0; }
+.reference-error:not(:empty) { color:var(--ff-moss); font:13px/1.6 Arial,sans-serif; border-left:1px solid currentColor; padding-left:12px; }
 .reference-overlays { display:flex; flex-wrap:wrap; gap:8px 24px; margin-top:20px; }
 .reference-overlays[hidden] { display:none; }
 .reference-findings summary { cursor:pointer; padding:7px 0; }
 .reference-findings { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px 40px; margin:24px 0; }
 .reference-findings:empty { display:none; }
 .reference-finding-value { font:22px/1.3 Georgia,serif; margin:8px 0; }
-.reference-source { font:9px/1.6 'Courier New',monospace; color:#6b746e; }
-.reference-suggestions:not(:empty), .reference-stack:not([hidden]) { border-top:1px solid #d5dad4; margin-top:26px; padding-top:20px; }
+.reference-source { font:9px/1.6 'Courier New',monospace; color:var(--ff-secondary); }
+.reference-suggestions:not(:empty), .reference-stack:not([hidden]) { border-top:1px solid var(--ff-rule); margin-top:26px; padding-top:20px; }
 .reference-suggestion { display:flex; gap:22px; align-items:baseline; padding:12px 0; }
 .reference-suggestion span { margin-right:auto; font:16px/1.4 Arial,sans-serif; }
 .reference-suggestion a, .reference-suggestion button { white-space:nowrap; }
@@ -58,7 +58,7 @@
 .reference-stack li span { display:inline-block; min-width:200px; font:16px Arial,sans-serif; }
 .reference-stack > button { margin-right:24px; }
 .reference-limitations { margin-top:24px; }
-.instrument-page .reference-fixture-load { margin-top:24px; font:9px 'Courier New',monospace; color:#686d64; }
+.instrument-page .reference-fixture-load { margin-top:24px; font:9px 'Courier New',monospace; color:var(--ff-secondary); }
 @media(max-width:700px), (hover:none) {
  .instrument-page .instrument-header { flex-wrap:wrap; height:auto; min-height:100px; gap:12px; }
  .instrument-header h1 { width:100%; }
@@ -80,3 +80,40 @@
 .reference-observations:not(:empty) { margin-top:24px; }
 .reference-observations summary { cursor:pointer; padding:5px 0; }
 .reference-section-label { grid-column:1 / -1; }
+
+/* Keep portrait references contained and aligned with their normalized overlays. */
+.reference-open .instrument-frame { height:min(60vh,680px); aspect-ratio:auto; }
+.instrument-surface[data-view=demo] .instrument-frame { height:auto; aspect-ratio:8/5; }
+.reference-limitations summary { cursor:pointer; padding:12px 0; }
+@media(min-width:1200px) and (hover:hover) {
+ .instrument-page.reference-open #app { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(350px,1fr); column-gap:40px; align-content:start; }
+ .reference-open .instrument-header,.reference-open .instrument-footer { grid-column:1 / -1; }
+ .reference-open .instrument-surface { grid-column:1; grid-row:2; align-self:start; padding:24px 0 0 36px; }
+ .reference-open .instrument-frame { width:100%; }
+ .reference-open .reference-panel { grid-column:2; grid-row:2; width:auto; min-width:0; margin:0 36px 36px 0; padding-top:24px; }
+ .reference-open .reference-findings { grid-template-columns:1fr; gap:16px; }
+ .reference-open .reference-suggestion { flex-wrap:wrap; gap:8px 16px; }
+ .reference-open .reference-suggestion span { flex-basis:100%; }
+}
+@media(max-width:700px), (hover:none) {
+ .reference-open .instrument-frame { height:min(48vh,460px); }
+ .reference-panel button { min-height:44px; }
+}
+.reference-panel [aria-pressed=true] { color:var(--ff-ink);text-decoration-color:var(--ff-jade); }
+.reference-image-plane svg { stroke:var(--ff-jade);filter:drop-shadow(0 1px 1px var(--ff-ink)); }
+.reference-image-plane rect { fill:var(--ff-jade); }
+.reference-stack:not([hidden]) { border-top-color:var(--ff-jade); }
+/* Inspection typography; the image plane and overlay geometry stay unchanged. */
+.reference-empty h2 { font-family:var(--ff-display);letter-spacing:-.045em; }
+.reference-layer { background:var(--ff-media-surface); }
+.reference-panel { counter-reset:inspection; }
+.reference-panel .reference-section-label { font:11px/1.6 var(--ff-technical);letter-spacing:.07em;color:var(--ff-moss); }
+.reference-observations:not(:empty),.reference-findings:not(:empty),.reference-limitations { border-top:1px solid var(--ff-rule);padding-top:18px; }
+.reference-observations > div,.reference-findings > div:not(.reference-section-label) { border-bottom:1px solid var(--ff-rule);padding-bottom:16px; }
+.reference-finding-value { font:23px/1.2 var(--ff-display);letter-spacing:-.025em; }
+.reference-suggestion { border-bottom:1px solid var(--ff-rule);padding:16px 0; }
+.reference-limitations > summary { font:11px/1.6 var(--ff-technical);letter-spacing:.05em;text-transform:uppercase; }
+.reference-error:not(:empty) { border:0;border-block:1px solid var(--ff-rule-strong);padding:14px 0; }
+.reference-panel button:focus-visible { outline:2px solid var(--ff-moss);outline-offset:4px; }
+.instrument-page .reference-panel button,.instrument-page .reference-panel a { font:11px/1.6 var(--ff-technical);letter-spacing:.035em;min-height:44px; }
+.instrument-page .reference-panel h3.reference-meta { font:11px/1.6 var(--ff-technical);letter-spacing:.05em;color:var(--ff-moss); }

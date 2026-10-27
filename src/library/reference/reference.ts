@@ -3,7 +3,7 @@ import { button, el, link } from '../dom';
 import { referenceProvider, ReferenceAnalysisEngine } from './provider';
 import { addToStack, LocalReference, validateImage } from './state';
 import type { Finding, ReconstructionControlId, ReferenceAnalysis, ReferenceAnalysisProvider } from './types';
-import { analysisErrors } from './errors';
+import { analysisErrors, PUBLIC_ANALYSIS_BYTES } from './errors';
 import './reference.css';
 
 type View = 'explore' | 'reference' | 'demo';
@@ -24,6 +24,7 @@ export function createReferenceMode({ frame, surface, onView, provider = referen
   let stack: ReconstructionControlId[] = [];
   let selectedOverlay: Overlay | null = null;
   let previewOverlay: Overlay | null = null;
+  let observationOverlay: ReferenceAnalysis['observations'][number] | null = null;
   let loading = false;
   let disposed = false;
   let request = 0;
@@ -32,7 +33,7 @@ export function createReferenceMode({ frame, surface, onView, provider = referen
   const empty = el('div', 'reference-empty');
   const input = el('input', 'reference-file'); input.type = 'file'; input.accept = 'image/jpeg,image/png,image/webp'; input.id = 'reference-file'; input.setAttribute('aria-label', 'Choose reference image');
   const choose = el('label', 'reference-choose', 'CHOOSE FILE ↗'); choose.htmlFor = input.id;
-  empty.append(el('span', 'reference-meta', 'REFERENCE ANALYSIS'), el('h2', '', 'Drop an image.'), choose, input, el('span', 'reference-meta', 'JPG · PNG · WEBP / UP TO 10 MB'), el('p', '', import.meta.env.PROD ? 'Inspect an image locally. Analysis is unavailable in this public release.' : 'Find the visual controls inside a reference.'));
+  empty.append(el('span', 'reference-meta', 'REFERENCE / EXPERIMENTAL'), el('h2', '', 'Drop an image.'), choose, input, el('span', 'reference-meta', 'JPG · PNG · WEBP / UP TO 10 MB'), el('p', '', 'Inspect visual structure, then choose controls to explore.'));
   const plane = el('div', 'reference-image-plane'); plane.hidden = true;
   const image = el('img'); image.alt = 'Selected visual reference';
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', '0 0 1000 1000'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
@@ -42,11 +43,11 @@ export function createReferenceMode({ frame, surface, onView, provider = referen
   const panel = el('section', 'reference-panel'); panel.hidden = true; panel.setAttribute('aria-label', 'Reference analysis and reconstruction controls'); surface.after(panel);
   const toolbar = el('div', 'reference-toolbar');
   const referenceButton = button('REFERENCE', () => setView('reference'));
-  const demoButton = button('DEMO', () => setView('demo')); demoButton.disabled = true; demoButton.hidden = import.meta.env.PROD;
+  const demoButton = button('DEMO', () => setView('demo')); demoButton.disabled = true;
   const replace = button('REPLACE IMAGE ↗', () => input.click());
   const remove = button('REMOVE IMAGE', reset);
   const metadata = el('span', 'reference-meta');
-  const analyzeButton=button('ANALYZE REFERENCE',()=>{void analyze();});
+  const analyzeButton=button('ANALYZE REFERENCE ↗',()=>{void analyze();});
   const cancelButton=button('CANCEL ANALYSIS',()=>{request++;engine.reset();error.textContent=analysisErrors.cancelled;render();});
   toolbar.append(referenceButton, demoButton, metadata, replace, remove, analyzeButton, cancelButton);
   const status = el('p', 'reference-status'); status.setAttribute('role', 'status');
@@ -61,7 +62,7 @@ export function createReferenceMode({ frame, surface, onView, provider = referen
   const suggestions = el('section', 'reference-suggestions');
   const stackSection = el('section', 'reference-stack');
   const limitations = el('div', 'reference-limitations');
-  panel.append(toolbar, el('p', 'reference-note', 'Experimental reference analysis. Not validated visual intelligence.'), error, status, privacy, demoNote, overlayBar, overlayText, observations, findings, suggestions, stackSection, limitations);
+  panel.append(toolbar, el('p', 'reference-note', 'Experimental visual analysis'), error, status, privacy, demoNote, overlayBar, overlayText, observations, findings, suggestions, stackSection, limitations);
   let fixtureButton:HTMLButtonElement|undefined;
   let exportButton:HTMLButtonElement|undefined;
   if (import.meta.env.DEV) {
@@ -96,12 +97,20 @@ export function createReferenceMode({ frame, surface, onView, provider = referen
   function renderOverlay() {
     svg.replaceChildren(); overlayText.textContent = '';
     const shownOverlay=previewOverlay??selectedOverlay;
-    if (!result || !shownOverlay) return;
+    if (!result || (!shownOverlay && !observationOverlay)) return;
     const add = (tag: 'line' | 'circle' | 'rect', attrs: Record<string, number>) => {
       const node = document.createElementNS(svg.namespaceURI, tag);
       Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
       svg.append(node);
     };
+    if (observationOverlay) {
+      const item = observationOverlay;
+      if(item.region) add('rect', {x:item.region.x*1000,y:item.region.y*1000,width:item.region.width*1000,height:item.region.height*1000});
+      if(item.anchor) add('circle', {cx:item.anchor.x*1000,cy:item.anchor.y*1000,r:10});
+      item.lines.forEach(line => add('line',{x1:line.from.x*1000,y1:line.from.y*1000,x2:line.to.x*1000,y2:line.to.y*1000}));
+      overlayText.textContent = item.statement + ' ' + item.evidence.join(' ');
+      return;
+    }
     const { anchor, negativeSpace, perspectiveLines } = result.overlays;
     if ((shownOverlay === 'anchor' || shownOverlay === 'thirds') && anchor) {
       add('line', { x1: anchor.x * 1000 - 12, y1: anchor.y * 1000, x2: anchor.x * 1000 + 12, y2: anchor.y * 1000 });
@@ -148,26 +157,26 @@ export function createReferenceMode({ frame, surface, onView, provider = referen
     const clear = button('CLEAR STACK', () => { stack = []; refreshStack(); }); clear.disabled = !stack.length;
     const apply = button('APPLY TO DEMO ↗', () => setView('demo')); apply.disabled = !stack.length;
     stackSection.append(clear, apply);
-    suggestions.querySelectorAll<HTMLButtonElement>('[data-add]').forEach(item => { item.disabled = stack.includes(item.dataset.add as ReconstructionControlId); item.textContent = item.disabled ? 'ADDED' : 'ADD TO STACK'; });
+    suggestions.querySelectorAll<HTMLButtonElement>('[data-add]').forEach(item => { item.disabled = stack.includes(item.dataset.add as ReconstructionControlId); item.textContent = item.disabled ? 'ADDED' : 'ADD TO STACK ↗'; });
     demoButton.disabled = !stack.length;
   }
   function refreshStack() { renderStack(); if(view === 'demo'){if(stack.length)onView('demo',stack);else setView('reference');} }
   function render() {
-    previewOverlay=null;
+    previewOverlay=null; observationOverlay=null;
     const current = local.current;
     empty.hidden = !!current; plane.hidden = !current; replace.hidden = !current; remove.hidden = !current;
-    metadata.textContent = current ? `${current.width} × ${current.height} / ${(current.width/current.height).toFixed(2)}:1` : 'IMAGE REFERENCES';
+    metadata.textContent = current ? `LOCAL REFERENCE · ${current.width} × ${current.height} / ${(current.width/current.height).toFixed(2)}:1` : 'IMAGE REFERENCES';
     if(current){image.src=current.url;image.alt=result?.provenance==='development-fixture'?'Authored development sample. Not model analysis.':`Local reference: ${current.name}`;}else image.removeAttribute('src');
     badge.hidden = result?.provenance !== 'development-fixture';
     panel.dataset.providerStatus=engine.state.status;
     const configured=!!provider&&provider.available!==false;
-    privacy.textContent=configured?'Analyze Reference sends this image to OpenAI. The app processes it in memory and does not save it as experiment evidence.':'Local to this page. Not saved, uploaded, or attached to experiment evidence.';
+    privacy.textContent=configured?'Analyze sends the image to OpenAI. FRAMEFIELD does not save it; provider retention policies apply.':'Local inspection only. Analysis is currently unavailable.';
     analyzeButton.hidden=!current||result?.provenance==='development-fixture';
-    analyzeButton.disabled=!configured||loading||engine.state.status==='analyzing';
+    analyzeButton.disabled=!configured||loading||engine.state.status==='analyzing'||!!current&&current.file.size>PUBLIC_ANALYSIS_BYTES;
     cancelButton.hidden=engine.state.status!=='analyzing';
     if(fixtureButton)fixtureButton.hidden=configured;
     if(exportButton)exportButton.hidden=result?.provenance!=='provider';
-    status.textContent = engine.state.status==='analyzing' ? 'Analyzing reference…' : engine.state.status==='error' ? engine.state.error : loading ? 'Reading image…' : result?.provenance === 'development-fixture' ? 'DEMO / NOT MODEL ANALYSIS — authored sample only.' : current && !configured ? (import.meta.env.PROD ? 'ANALYSIS UNAVAILABLE IN THIS PUBLIC RELEASE' : 'ANALYSIS PROVIDER NOT CONNECTED') : current && !result ? 'Ready to analyze. Your image has not been sent.' : result ? 'Reference analysis' : 'Choose an image to begin.';
+    status.textContent = engine.state.status==='analyzing' ? 'ANALYZING VISUAL STRUCTURE…' : engine.state.status==='error' ? engine.state.error : loading ? 'Reading image…' : result?.provenance === 'development-fixture' ? 'DEMO / NOT MODEL ANALYSIS — authored sample only.' : current && !configured ? 'ANALYSIS PROVIDER UNAVAILABLE' : current && current.file.size>PUBLIC_ANALYSIS_BYTES ? 'Local inspection available. Analysis requires a file up to 4 MB.' : current && !result ? 'Ready to analyze · up to 4 MB. Analysis starts only when requested.' : result ? 'Reference analysis' : 'Choose an image to begin.';
     observations.replaceChildren();findings.replaceChildren(); suggestions.replaceChildren(); overlayBar.replaceChildren(); limitations.replaceChildren();
     stackSection.hidden = !result;
     if (current && !result && !loading) {
@@ -175,9 +184,13 @@ export function createReferenceMode({ frame, surface, onView, provider = referen
       findings.append(el('p', 'reference-note', 'CAMERA MOVEMENT / UNAVAILABLE — Camera movement requires temporal evidence.'));
     }
     if(result) {
-      observations.append(el('h3','reference-meta','WHAT WE CAN SEE'));
-      result.observations.forEach(item=>{const detail=el('details');detail.append(el('summary','reference-note',item.statement),el('p','reference-meta',`OBSERVED / ${item.confidenceState}`));item.evidence.forEach(text=>detail.append(el('p','reference-note',text)));observations.append(detail);});
-      findings.append(el('h3','reference-meta reference-section-label','WHAT IT MAY MEAN'));
+      observations.append(el('h3','reference-meta','01 — OBSERVED'));
+      result.observations.forEach(item=>{const detail=el('details');detail.append(el('summary','reference-note',item.statement),el('p','reference-meta',`OBSERVED / ${item.confidenceState}`));item.evidence.forEach(text=>detail.append(el('p','reference-note',text)));const show = () => { observationOverlay=item;renderOverlay(); };
+        const hide = () => { observationOverlay=null;renderOverlay(); };
+        detail.addEventListener('pointerenter',show);detail.addEventListener('pointerleave',hide);
+        detail.addEventListener('focusin',show);detail.addEventListener('focusout',hide);
+        observations.append(detail);});
+      findings.append(el('h3','reference-meta reference-section-label','02 — INFERRED'));
       result.composition.forEach(item => findings.append(finding('COMPOSITION',nameFor(item.controlId),item,item.status==='unavailable'?undefined:item.controlId==='rule-of-thirds'?'thirds':item.controlId==='negative-space'?'space':'axis')));
       findings.append(finding('LENS TENDENCY', result.lensTendency.value ?? 'Unavailable', result.lensTendency));
       const framing = result.framing.value;
@@ -186,9 +199,10 @@ export function createReferenceMode({ frame, surface, onView, provider = referen
       findings.append(finding('CAMERA MOVEMENT', 'Unavailable from a single still.', result.cameraMovement));
       const overlays: [Overlay,string,boolean][] = [['anchor','SUBJECT ANCHOR',!!result.overlays.anchor],['thirds','THIRDS',true],['axis','CENTER AXIS',true],['space','NEGATIVE SPACE',!!result.overlays.negativeSpace],['perspective','PERSPECTIVE',!!result.overlays.perspectiveLines?.length]];
       overlays.forEach(([id,label,available]) => { if(!available)return; const choice = button(label, () => { selectedOverlay = selectedOverlay === id ? null : id; overlayBar.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed','false')); renderOverlay(); }); choice.dataset.overlay=id; choice.setAttribute('aria-pressed',String(id===selectedOverlay)); overlayBar.append(choice); });
-      suggestions.append(el('h3', 'reference-meta', 'CONTROLS YOU COULD USE'),el('p','reference-note','Creative reconstruction suggestions. Lens values do not identify the original focal length. Explore a control to reach its model translations.'));
+      suggestions.append(el('h3', 'reference-meta', '03 — SUGGESTED CONTROLS'),el('p','reference-note','Creative reconstruction suggestions. Lens values do not identify the original focal length. Explore a control to reach its model translations.'));
       result.suggestedControls.forEach(suggestion => { const id=suggestion.controlId; const row=el('div','reference-suggestion');const add=button('ADD TO STACK',()=>{stack=addToStack(stack,id);refreshStack();});add.dataset.add=id;add.setAttribute('aria-label',`Add ${nameFor(id)} to stack`);row.append(el('span','',nameFor(id)+(id.startsWith('lens-')?' · reconstruction suggestion':'')),link(`/library/${id}`,'EXPLORE ↗'),add);suggestions.append(row,el('p','reference-note',`${suggestion.confidenceState} · ${suggestion.reason}`)); });
-      result.limitations.forEach(text => limitations.append(el('p','reference-note',text)));
+      const limits=el('details'); limits.append(el('summary','reference-meta','04 — LIMITATIONS'));
+      result.limitations.forEach(text => limits.append(el('p','reference-note',text))); limitations.append(limits);
       renderStack();
     }
     demoButton.disabled = !stack.length;
