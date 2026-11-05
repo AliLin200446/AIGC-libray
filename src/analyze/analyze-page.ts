@@ -65,6 +65,7 @@ export function mountAnalyze(root: HTMLElement, opts: AnalyzeOptions): () => voi
   const ov = { thirds: true, subject: true, horizon: true };
   let errorMsg = '', uploadError = '';
   let ac: AbortController | null = null;
+  let selection = 0;
   let timer = 0, phase = 0;
   let copyTimer = 0;
   const live = new AbortController();
@@ -100,8 +101,9 @@ export function mountAnalyze(root: HTMLElement, opts: AnalyzeOptions): () => voi
       <figure class="az-mosaic" aria-hidden="true">${brackets}<figcaption>Frame · guides · subject · horizon</figcaption></figure>
     </section>
 
-    ${url ? `<section class="az-sec"><img src="${esc(url)}" alt="Selected image preview" style="max-width:100%;max-height:320px;object-fit:contain"><p>${esc(fileName)}</p><button class="az-btn az-btn--pri" data-act="analyze">Analyze image →</button></section>` : ''}
+    ${url ? `<section class="az-sec"><img src="${esc(url)}" alt="Selected image preview" style="max-width:100%;max-height:320px;object-fit:contain"><p>${esc(fileName)}</p><button class="az-btn az-btn--pri" data-act="analyze">Analyze image →</button> <button type="button" class="az-btn az-btn--sec" data-act="reset">Clear image</button></section>` : ''}
     <section class="az-drop-row">
+      <div class="az-upload-column">
       <label class="az-drop" data-drop>
         <input type="file" accept="${ACCEPT.join(',')}" class="az-file" data-act="file">
         <span class="az-drop-dash" aria-hidden="true"></span>
@@ -111,6 +113,8 @@ export function mountAnalyze(root: HTMLElement, opts: AnalyzeOptions): () => voi
         <span class="az-drop-chips"><span class="az-chip">JPG · PNG · WebP</span><span class="az-chip">Up to ${Math.round(maxBytes / 1048576)} MB</span><span class="az-chip">One frame</span></span>
         <span class="az-drop-err" aria-live="assertive">${esc(uploadError)}</span>
       </label>
+    ${opts.samples?.length ? '<p class="az-sample-action"><button type="button" class="az-btn az-btn--sec" data-act="sample" data-i="0">Try sample →</button> <span class="az-fine">Original FRAMEFIELD image · preview only until you click Analyze.</span></p>' : ''}
+      </div>
       ${opts.samples?.length ? `
       <aside class="az-samples">
         <div class="az-samples-head"><span class="az-lab az-lab--ink">No image? Try a sample</span><span class="az-lab">Original studies</span></div>
@@ -119,6 +123,7 @@ export function mountAnalyze(root: HTMLElement, opts: AnalyzeOptions): () => voi
         </div>
       </aside>` : ''}
     </section>
+
 
     <section class="az-sec">
       <div class="az-sec-head">
@@ -428,18 +433,24 @@ export function mountAnalyze(root: HTMLElement, opts: AnalyzeOptions): () => voi
   }
 
   async function accept(blob: Blob, name: string) {
+    const selected = ++selection;
+    ac?.abort(); result = null; included.clear(); step = 'upload';
+    creativeComposition = ''; creativeFocal = 50; creativeLensEdited = false;
+    try { sessionStorage.removeItem(HANDOFF_KEY); } catch { /* Storage may be unavailable. */ }
     if (!ACCEPT.includes(blob.type)) { uploadError = 'Use a JPG, PNG or WebP image.'; render(); return; }
     if (blob.size > maxBytes) { uploadError = `That file is over ${Math.round(maxBytes / 1048576)} MB.`; render(); return; }
     uploadError = '';
     if (url) URL.revokeObjectURL(url);
     file = blob; fileName = name; url = URL.createObjectURL(blob);
-    dims = await readDims(url);
+    const nextDims = await readDims(url);
+    if (selected !== selection || live.signal.aborted) return;
+    dims = nextDims;
     if(!dims.w||!dims.h){uploadError="This image could not be decoded.";file=null;URL.revokeObjectURL(url);url="";}
     render();
   }
 
   async function run() {
-    if (!file) return;
+    if (!file || step === 'processing') return;
     ac?.abort();
     ac = new AbortController();
     const currentRequest=ac;
@@ -468,6 +479,8 @@ export function mountAnalyze(root: HTMLElement, opts: AnalyzeOptions): () => voi
   }
 
   function reset() {
+    selection++;
+    try { sessionStorage.removeItem(HANDOFF_KEY); } catch { /* Storage may be unavailable. */ }
     ac?.abort();
     if (url) URL.revokeObjectURL(url);
     file = null; url = ''; fileName = ''; result = null; uploadError = ''; step = 'upload';
@@ -490,8 +503,20 @@ export function mountAnalyze(root: HTMLElement, opts: AnalyzeOptions): () => voi
     if (act === 'sample') {
       const s = opts.samples?.[Number(el.dataset.i)];
       if (!s) return;
-      const blob = await (await fetch(s.src)).blob();
-      void accept(blob, `${s.name.toLowerCase()}.${blob.type.split('/')[1] ?? 'png'}`);
+      const selected = ++selection;
+      el.setAttribute('disabled', '');
+      try {
+        const response = await fetch(s.src, { signal: live.signal });
+        if (!response.ok) throw new Error('Sample unavailable');
+        const blob = await response.blob();
+        if (selected !== selection || live.signal.aborted) return;
+        await accept(blob, `${s.name.toLowerCase()}.${blob.type.split('/')[1] ?? 'png'}`);
+        root.querySelector('[data-act="analyze"]')?.scrollIntoView({ block: 'center' });
+      } catch {
+        if (selected !== selection || live.signal.aborted) return;
+        uploadError = 'The sample could not be loaded. Try again or choose your own image.';
+        render();
+      }
     }
     if (act === 'cancel' || act === 'reset') reset();
     if (act === 'analyze') void run();

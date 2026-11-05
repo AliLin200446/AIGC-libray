@@ -317,3 +317,9 @@
   .az-g, .az-hz, .az-scan { transition: none !important; }
   .az-stage[data-pstage="2"] .az-search { animation: none; width: 40%; height: 64%; }
 }
+
+/* Keep the quick-start action directly under the upload target on every screen. */
+.az-upload-column { flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.az-upload-column .az-drop { flex: 1 1 auto; }
+.az-sample-action { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
+.analyze-page .az-sample-action .az-btn { flex: 0 0 auto; padding: 0 20px; min-height: 48px; font: 500 12px var(--ff-technical); letter-spacing: .08em; }
