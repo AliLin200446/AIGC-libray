@@ -1,5 +1,5 @@
 import {shotHref, instrumentSettings} from '../../playground/instrument-handoff';
-import { primaryNavigation,activeDestination } from '../../navigation/routes';
+import {GlobalNavbar} from '../../navigation/global-navbar';
 import { parseRemix,remixKey } from '../../recipes/model';
 import { replaceFamily,remixLimitations } from '../../recipes/remix';
 import '../../recipes/recipes.css';
@@ -47,8 +47,7 @@ export function renderInstrument(app: HTMLElement): void {
   const remixBanner=el('aside','remix-banner');remixBanner.hidden=!remix;
   function describeRemix(){if(!remix)return;remixBanner.replaceChildren(el('span','',`REMIXING / ${remix.title} / ${remix.sourceRecipeId}`));const notes=el('details');notes.append(el('summary','','DETERMINISTIC PREVIEW / LIMITATIONS'));for(const note of remixLimitations(remix.workingControlStack))notes.append(el('p','',note));remixBanner.append(notes,button('EXIT REMIX',()=>{remix=null;remixFocal=undefined;remixBanner.hidden=true;history.replaceState(null,'','/');neutral();}));}
   describeRemix();
-  const header=el('header','instrument-header');
-  const wordmark=el('h1'); wordmark.append(link('/','FRAMEFIELD','wordmark'));
+  const header=GlobalNavbar();
   const indexToggle=button('INDEX ↗',toggleIndex,'index-toggle'); indexToggle.setAttribute('aria-expanded','false'); indexToggle.setAttribute('aria-controls','instrument-index');
   let reference: ReturnType<typeof createReferenceMode> | undefined;
   let disposed = false;
@@ -71,8 +70,6 @@ export function renderInstrument(app: HTMLElement): void {
   let composing=false;
   function setComposing(value:boolean){composing=value;document.body.classList.toggle('compose-open',value);modeState(composeMode,value);modeState(exploreMode,!value);if(value)modeState(referenceMode,false);composeUI.setEnabled(value);syncDiscovery();}
   const referenceMode=button('REFERENCE ↗',()=>{void openReference();});
-  const navigation=el('nav','instrument-nav'); navigation.setAttribute('aria-label','Library modes');
-  for(const[href,label]of primaryNavigation){const item=link(href,label,'recipes-nav');if(activeDestination(location.pathname)===href)item.setAttribute('aria-current','page');navigation.append(item);}header.append(wordmark,navigation);
   const surface=el('section','instrument-surface camera-instrument'); surface.setAttribute('aria-label','Visual control instrument'); surface.dataset.state='idle';
   const frame=el('div','instrument-frame');
   const viewport=el('div','instrument-viewport'); viewport.dataset.demonstration='deterministic-visual-vocabulary';

@@ -1,3 +1,4 @@
+import globalNavbarCSS from './styles/global-navbar.css?inline';
 import { canonicalRoute,composeView } from './navigation/routes';
 import '@fontsource/geist/400.css';
 import '@fontsource/geist/500.css';
@@ -17,7 +18,7 @@ import pixelThemeCSS from './styles/pixel-theme.css?inline';
 // before render constructs a Three.js palette. Also handle late-loaded panels.
 const theme = document.createElement('style');
 theme.dataset.framefieldTheme = 'pixel-r1';
-theme.textContent = pixelThemeCSS + '\n' + pixelInteractionsCSS + '\n' + clipPageCSS + '\n' + indexPageCSS + '\n' + studiesPageCSS + '\n' + controlPageCSS + '\n' + analyzePageCSS;
+theme.textContent = pixelThemeCSS + '\n' + pixelInteractionsCSS + '\n' + clipPageCSS + '\n' + indexPageCSS + '\n' + studiesPageCSS + '\n' + controlPageCSS + '\n' + analyzePageCSS + '\n' + globalNavbarCSS;
 applyPixelStyles();
 const disposeInteractions = initPixelInteractions();
 import.meta.hot?.dispose(() => { disposeInteractions(); disposePixels(); pixelMounts.disconnect(); themeOrder.disconnect(); theme.remove(); });

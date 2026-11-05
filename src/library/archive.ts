@@ -1,12 +1,14 @@
+import {GlobalNavbar} from '../navigation/global-navbar';
 import { primaryNavigation,activeDestination } from '../navigation/routes';
 import { el, link } from './dom';
 import './library.css';
 import './archive.css';
 
-/** Shared public catalog shell; the spatial homepage owns its own shell. */
+/** Public pages share GlobalNavbar; private development tools retain their shell. */
 export function archiveShell(app: HTMLElement) {
   document.body.classList.add('library-app', 'archive-page');
   app.replaceChildren();
+  if(!location.pathname.startsWith('/admin/')&&!location.pathname.startsWith('/dev/')){app.append(GlobalNavbar());return;}
   const header = el('header', 'archive-header');
   const nav = el('nav'); nav.setAttribute('aria-label', 'Main navigation');
   for (const [href, label] of primaryNavigation) {
