@@ -1,5 +1,4 @@
 import {shotHref, instrumentSettings} from '../../playground/instrument-handoff';
-import {GlobalNavbar} from '../../navigation/global-navbar';
 import { parseRemix,remixKey } from '../../recipes/model';
 import { replaceFamily,remixLimitations } from '../../recipes/remix';
 import '../../recipes/recipes.css';
@@ -47,7 +46,7 @@ export function renderInstrument(app: HTMLElement): void {
   const remixBanner=el('aside','remix-banner');remixBanner.hidden=!remix;
   function describeRemix(){if(!remix)return;remixBanner.replaceChildren(el('span','',`REMIXING / ${remix.title} / ${remix.sourceRecipeId}`));const notes=el('details');notes.append(el('summary','','DETERMINISTIC PREVIEW / LIMITATIONS'));for(const note of remixLimitations(remix.workingControlStack))notes.append(el('p','',note));remixBanner.append(notes,button('EXIT REMIX',()=>{remix=null;remixFocal=undefined;remixBanner.hidden=true;history.replaceState(null,'','/');neutral();}));}
   describeRemix();
-  const header=GlobalNavbar();
+  const header=document.querySelector<HTMLElement>('.ff-hdr')!;
   const indexToggle=button('INDEX ↗',toggleIndex,'index-toggle'); indexToggle.setAttribute('aria-expanded','false'); indexToggle.setAttribute('aria-controls','instrument-index');
   let reference: ReturnType<typeof createReferenceMode> | undefined;
   let disposed = false;
@@ -209,7 +208,7 @@ export function renderInstrument(app: HTMLElement): void {
   explore.addEventListener('focus',cancelReturn);explore.addEventListener('blur',scheduleReturn);
   const footer=el('footer','instrument-footer');
   footer.append(el('span','','Visual Control Library for Generative Media'),el('span','desktop-hint','Approach an edge. Find a different view.'),el('span','touch-hint','Tap a category, then a control. Explore to go deeper.'),el('span','','DETERMINISTIC DEMONSTRATION'));
-  app.append(header,remixBanner,surface,index,footer);
+  app.append(remixBanner,surface,index,footer);
   const headerSize=new ResizeObserver(()=>surface.style.setProperty('--instrument-header-height',`${header.getBoundingClientRect().height}px`));
   headerSize.observe(header);
   const shotRow=el('div','instrument-shot-cta');

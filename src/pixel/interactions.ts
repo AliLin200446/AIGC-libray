@@ -46,7 +46,7 @@ const DEFAULT_BLOCK = [
   'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'li', 'dt', 'dd', 'figcaption', 'blockquote', 'pre', 'code', 'table',
   'img', 'svg', 'video', 'canvas', 'figure',
   '.instrument-viewport', '.lens-instrument', '.compose-workspace', '.compose-tools',
-  '.instrument-header', '.archive-header', '.instrument-footer',
+  '.ff-hdr', '.instrument-header', '.archive-header', '.instrument-footer',
   '[data-ff-no-trail]',
 ].join(',');
 

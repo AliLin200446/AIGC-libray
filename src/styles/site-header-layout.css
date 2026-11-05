@@ -1,0 +1,23 @@
+/* App-shell sizing only. Header appearance lives in site-header.css. */
+:root { --ff-navbar-height:64px; }
+html:has(.ff-hdr) { scrollbar-gutter:stable; }
+body:has(.ff-hdr).archive-page #app {
+ max-width:none;padding:0;display:grid;
+ grid-template-columns:minmax(var(--ff-page-gutter),1fr) minmax(0,calc(1600px - 2 * var(--ff-page-gutter))) minmax(var(--ff-page-gutter),1fr);
+}
+body:has(.ff-hdr).archive-page #app>* {grid-column:2;min-width:0;}
+body:has(.ff-hdr).instrument-page #app {min-height:calc(100dvh - var(--ff-navbar-height));}
+[id] {scroll-margin-top:72px;}
+@media(min-width:801px) {
+ body:has(.ff-hdr).instrument-page:not(.compose-open) #app:has(.camera-instrument) {
+  height:calc(100dvh - var(--ff-navbar-height));min-height:0;grid-template-rows:minmax(0,1fr) auto auto;
+ }
+}
+@media(max-width:720px) {:root {--ff-navbar-height:96px;}}
+@media(min-width:801px) {
+ body:has(.ff-hdr).archive-page #app:has(.shot-workspace) {
+  height:calc(100dvh - var(--ff-navbar-height));min-height:0;grid-template-rows:minmax(0,1fr);
+ }
+}
+/* Override the legacy generic header positioning without changing private headers. */
+.library-app .ff-hdr {position:sticky;top:0;z-index:50;}

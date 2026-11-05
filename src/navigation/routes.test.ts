@@ -19,3 +19,16 @@ test('Compose dispatch keeps P1 and P2 distinct while preserving legacy referenc
  for(const p of ['/','/compose/workspace','/compose?shot=1'])assert.equal(activeDestination(p),null);
  assert.equal(activeDestination('/analyze'),'/analyze');
  });
+
+// The supplied app-shell header follows the same public route hierarchy.
+import {activeFor,isLongPage} from '../nav/site-header';
+test('site header active states distinguish workspace action from section links',()=>{
+ assert.equal(activeFor('/'),null);
+ assert.equal(activeFor('/compose/workspace'),'compose');
+ assert.equal(activeFor('/explore/film-discovery-05'),'explore');
+ assert.equal(activeFor('/library/tilt'),'index');
+ assert.equal(activeFor('/analyze'),'analyze');
+ assert.equal(isLongPage('/library/tilt'),true);
+ assert.equal(isLongPage('/analyze'),true);
+ assert.equal(isLongPage('/explore'),false);
+});

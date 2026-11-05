@@ -72,7 +72,7 @@ export async function renderPlayground(app:HTMLElement){
  fit.append(mount);stage.append(lens,stageBar,fit,replay);workspace.append(controls);
  if(shotMode){workspace.prepend(stage);const lensGroup=group('Lens','lens');lensGroup.field.append(lens);controls.prepend(lensGroup.field);mount.querySelectorAll('.compose-side-label').forEach(e=>e.remove());}else main.prepend(stage);
  // Measure the real header, including wrapped navigation and font changes.
- const header=app.querySelector<HTMLElement>('.global-navbar');
+ const header=document.querySelector<HTMLElement>('.ff-hdr');
  const measureHeader=()=>main.style.setProperty('--compose-header-height',`${header?.getBoundingClientRect().height??0}px`);
  const headerObserver=new ResizeObserver(measureHeader);if(header)headerObserver.observe(header);measureHeader();
  const output=el('section','compose-output');output.setAttribute('aria-label','Generated prompt');

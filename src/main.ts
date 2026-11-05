@@ -1,4 +1,7 @@
-import globalNavbarCSS from './styles/global-navbar.css?inline';
+import siteHeaderCSS from './styles/site-header.css?inline';
+import siteHeaderLayoutCSS from './styles/site-header-layout.css?inline';
+import {mountSiteHeader} from './nav/site-header';
+import {controls} from './controls';
 import { canonicalRoute,composeView } from './navigation/routes';
 import '@fontsource/geist/400.css';
 import '@fontsource/geist/500.css';
@@ -18,7 +21,7 @@ import pixelThemeCSS from './styles/pixel-theme.css?inline';
 // before render constructs a Three.js palette. Also handle late-loaded panels.
 const theme = document.createElement('style');
 theme.dataset.framefieldTheme = 'pixel-r1';
-theme.textContent = pixelThemeCSS + '\n' + pixelInteractionsCSS + '\n' + clipPageCSS + '\n' + indexPageCSS + '\n' + studiesPageCSS + '\n' + controlPageCSS + '\n' + analyzePageCSS + '\n' + globalNavbarCSS;
+theme.textContent = pixelThemeCSS + '\n' + siteHeaderCSS + '\n' + pixelInteractionsCSS + '\n' + clipPageCSS + '\n' + indexPageCSS + '\n' + studiesPageCSS + '\n' + controlPageCSS + '\n' + analyzePageCSS + '\n' + siteHeaderLayoutCSS;
 applyPixelStyles();
 const disposeInteractions = initPixelInteractions();
 import.meta.hot?.dispose(() => { disposeInteractions(); disposePixels(); pixelMounts.disconnect(); themeOrder.disconnect(); theme.remove(); });
@@ -37,6 +40,16 @@ if (!app) throw new Error('Missing application mount point.');
 const canonical=canonicalRoute(location.pathname,location.search);
 if(canonical!==location.pathname+location.search)history.replaceState(history.state,'',canonical+location.hash);
 const path = window.location.pathname.replace(/\/$/, '') || '/';
+const headerHost=document.createElement('div');headerHost.id='site-header';
+const publicPage=!/^\/(admin|dev)(\/|$)/.test(path);
+if(publicPage)app.before(headerHost);
+const siteHeader=publicPage?mountSiteHeader(headerHost,{indexCount:controls.length}):null;
+const syncHeader=()=>siteHeader?.setPath(location.pathname);
+window.addEventListener('pageshow',syncHeader);
+window.addEventListener('popstate',syncHeader);
+import.meta.hot?.dispose(()=>{siteHeader?.dispose();headerHost.remove();window.removeEventListener('pageshow',syncHeader);window.removeEventListener('popstate',syncHeader);});
+window.addEventListener('pagehide',event=>{if(!event.persisted)siteHeader?.dispose();});
+
 async function unavailable(message: string) {
   const { renderUnavailable } = await import('./library/archive'); applyPixelStyles(); renderUnavailable(app!, message);
 }
