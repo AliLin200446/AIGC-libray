@@ -6,7 +6,7 @@ import { URL } from 'node:url';
 const assets = await readdir(new URL('../dist/assets/', import.meta.url));
 for (const asset of assets) {
   const text = await readFile(new URL(`../dist/assets/${asset}`, import.meta.url), 'utf8');
-  for (const marker of ['CLIP INGESTION / LOCAL REVIEW ONLY','x-framefield-review','PEXELS_API_KEY','local-clip-ingestion','RECIPE INGEST / DEVELOPMENT ONLY','local-recipes/recipe-01','REFERENCE CURATION / DEVELOPMENT ONLY','framefield-reference-curation-v1','crane-jib','rear-follow']) assert(!text.includes(marker), 'Draft taxonomy or curation leaked into production.');
+  for (const marker of ['PRIVATE VERTICAL SLICE','USE STATIC FRAMING AS CREATIVE START','CLIP INGESTION / LOCAL REVIEW ONLY','x-framefield-review','PEXELS_API_KEY','local-clip-ingestion','RECIPE INGEST / DEVELOPMENT ONLY','local-recipes/recipe-01','REFERENCE CURATION / DEVELOPMENT ONLY','framefield-reference-curation-v1','crane-jib','rear-follow']) assert(!text.includes(marker), 'Draft taxonomy or curation leaked into production.');
   assert(!text.includes('Known failure modes to test'), 'Dev inspector leaked into production.');
   assert(!text.includes('DEV / LOAD DEMO REFERENCE'), 'Reference fixture trigger leaked into production.');
   assert(!text.includes('Authored development fixture'), 'Reference fixture data leaked into production.');
@@ -44,4 +44,4 @@ for (const id of ['pan','tilt','dolly','orbit','lens-24mm','lens-35mm','lens-50m
 }
 console.log('Release audit passed: canonical pages, no local paths, credentials, source maps or debug logs.');
 
-assert((await readFile(new URL('../dist/index/index.html',import.meta.url),'utf8')).includes('<title>Components — Framefield</title>'));
+assert((await readFile(new URL('../dist/index/index.html',import.meta.url),'utf8')).includes('<title>Index — Framefield</title>'));

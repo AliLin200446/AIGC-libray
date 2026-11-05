@@ -1,0 +1,11 @@
+.reference-demo { max-width:1100px; margin:auto; padding:40px 24px; }
+.reference-demo section,.reference-demo fieldset { margin:24px 0; padding:20px; border:1px solid var(--ff-ink); }
+.demo-player { position:relative; aspect-ratio:16/9; margin:24px 0; background:var(--ff-paper); }
+.demo-player img,.demo-player iframe { width:100%; height:100%; object-fit:cover; border:0; }
+.reference-demo pre { white-space:pre-wrap; overflow-wrap:anywhere; font-size:12px; }
+.reference-demo textarea { width:100%; box-sizing:border-box; font:inherit; padding:16px; }
+.reference-demo .demo-viewport { position:relative; height:420px; width:100%; overflow:hidden; }
+.reference-demo fieldset { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; min-width:0; }
+.reference-demo button { margin:8px 12px 8px 0; padding:10px; }
+.reference-demo p { overflow-wrap:anywhere; }
+@media(max-width:600px){.reference-demo fieldset{grid-template-columns:1fr}.reference-demo .demo-viewport{height:300px}}

@@ -1,0 +1,10 @@
+import {el,button} from '../dom';
+import {mockAnalysis} from './simulated-motion';
+/** Explicit simulation only; never processes, labels or changes the reference record. */
+export function analysisPanel(){const root=el('section','clip-evidence');root.dataset.ffNoTrail='';const content=el('div');content.hidden=true;
+ const toggle=button('Analyze with AI',()=>{content.hidden=!content.hidden;toggle.setAttribute('aria-expanded',String(!content.hidden));});toggle.setAttribute('aria-expanded','false');
+ const live=button('LIVE MUSE ANALYSIS — UNAVAILABLE',()=>{});live.disabled=true;
+ content.append(el('p','','Live Muse analysis is disabled. API-key creation is reported to fail with HTTP 500; no working integration or processing permission is assumed. No media is sent.'),live);
+ const results=el('div');results.hidden=true;const simulate=button('Show Simulated Analysis',()=>{results.hidden=false;simulate.disabled=true;});content.append(simulate,results);
+ results.append(el('h3','','Simulated Analysis'),el('p','','Authored hypothetical test data. This is not Muse Spark output and does not analyze this reference. Timestamps belong to a six-second mock scenario, not the film.'),el('p','',`Camera movement: ${mockAnalysis.cameraMovement.value} · inferred · insufficient evidence`),el('p','',`Subject movement: ${mockAnalysis.subjectMotion.value}`),el('p','',`Composition: ${mockAnalysis.composition.value}`),el('p','','Framing: unavailable. Lens characteristics: unavailable; no focal length estimated.'),el('h4','','Observations / hypothetical'));
+ for(const o of mockAnalysis.observations)results.append(el('p','',o.statement));results.append(el('h4','','Timestamped evidence / hypothetical'));for(const e of mockAnalysis.temporalEvidence)results.append(el('p','',`${e.start}–${e.end}s: ${e.description}`));results.append(el('p','','Simulation is not saved or transferred as verified camera settings. Try in Compose uses the reference’s own supported evidence and explicit creative defaults.'));root.append(toggle,content);return root;}

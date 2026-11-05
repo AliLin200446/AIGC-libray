@@ -10,6 +10,36 @@
       "source": "/library",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/clips",
+      "destination": "/explore",
+      "permanent": false
+    },
+    {
+      "source": "/clips/:id([^/.]+)",
+      "destination": "/explore/:id",
+      "permanent": false
+    },
+    {
+      "source": "/playground",
+      "destination": "/compose",
+      "permanent": false
+    },
+    {
+      "source": "/about",
+      "destination": "/index",
+      "permanent": false
+    },
+    {
+      "source": "/recipes",
+      "destination": "/compose?presets=1",
+      "permanent": false
+    },
+    {
+      "source": "/recipes/:slug",
+      "destination": "/compose?recipe=:slug",
+      "permanent": false
     }
   ],
   "headers": [
@@ -30,7 +60,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://image.tmdb.org https://i.ytimg.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
         }
       ]
     },
@@ -48,6 +78,12 @@
     "api/reference-analysis.mjs": {
       "maxDuration": 90,
       "supportsCancellation": true
+    },
+    "api/analyze.mjs": {
+      "maxDuration": 120
     }
+  },
+  "git": {
+    "deploymentEnabled": false
   }
 }

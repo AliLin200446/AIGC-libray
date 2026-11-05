@@ -11,6 +11,9 @@ export type FilterGroup = keyof typeof filterGroups;
 export type ClipCategories = { [K in FilterGroup]: readonly (typeof filterGroups[K][number])[] };
 export type ClipFilters = { [K in FilterGroup]: string[] };
 export interface ClipReference {
+  demonstration?:boolean;
+  curated?: import('./curated').CuratedStudy;
+  film?: {uploadDuration?:number;sceneNote?:string;title:string;year:number;embedUrl:string;startTime:number;endTime?:number;expiresAt:string;thumbnail?:{url:string;expiresAt:string};cover?:{url:string;sourceUrl:string;attribution:string;logoUrl:string;expiresAt:string}};
   id: string;
   title: string;
   description: string;

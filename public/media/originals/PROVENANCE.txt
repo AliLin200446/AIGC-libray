@@ -1,0 +1,22 @@
+FRAMEFIELD original camera demonstrations — 2026-11-04
+
+Assets: dolly.mp4, tracking.mp4, pan.mp4, orbit.mp4 and matching JPG poster frames.
+Creator: generated for FRAMEFIELD in this project from original procedural geometry.
+Source: scripts/render-original-demos.py (reproducible local renderer).
+No movie footage, stock footage, third-party images, logos, actors or downloaded media are used.
+No generative AI media service or external API receives any content.
+
+Scope: original project assets authorized for inclusion, playback, hosting, poster display
+and modification in the FRAMEFIELD prototype. No third-party film license is implied.
+These are original rendered demonstrations, NOT real film scenes or photoreal captures.
+
+Each clip is 768 x 432, 24 fps, 6 seconds, silent H.264 MP4. Posters are frame 48
+from the same rendering. Geometry is a travertine colonnade with terracotta sculptures.
+Dolly: forward translation, fixed viewing direction.
+Tracking: lateral translation, fixed viewing direction.
+Pan: fixed position, horizontal rotation.
+Orbit: arc translation around a stationary sculpture, continuously aimed toward it.
+Camera setup is authored, not inferred. No physical production measurements claimed.
+
+R1 Studies palette update: all four videos and matching posters re-rendered from
+the --ff-scene-* tokens in src/styles/pixel-theme.css. No CSS filters applied.

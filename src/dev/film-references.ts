@@ -1,3 +1,5 @@
+import {analysisPanel} from '../library/reference/analysis-panel';
+import { discoveryPanel, discoveryRequest, mediaSummary } from './reference-discovery';
 import { importPanel, batchPanel } from './reference-media';
 import { archiveShell, pageTitle } from '../library/archive';
 import { el, button, link } from '../library/dom';
@@ -11,26 +13,29 @@ export async function renderFilmReferences(app:HTMLElement) {
  const status=el('p');status.setAttribute('role','status');
  const filter=el('select');filter.setAttribute('aria-label','Review status');for(const s of ['all','candidate','approved','rejected']){const o=el('option','',s.toUpperCase());o.value=s;filter.append(o);}
  const toolbar=el('div','admin-actions');toolbar.append(filter,button('REFRESH',()=>{void refresh();}),link('/clips','CLIP LIBRARY ↗','technical-action'));
+ toolbar.append(button('DISCOVER MEDIA FOR ALL 12',()=>{if(busy)return;busy=true;status.textContent='Discovering metadata for up to twelve records…';void discoveryRequest('discover-media',{kind:'all'}).then(async()=>{status.textContent='Discovery complete. Review each candidate; nothing approved or published.';await refresh();}).catch(e=>status.textContent=e.message).finally(()=>busy=false);}));
  const stats=el('p','technical');const queue=el('section','admin-queue');queue.setAttribute('aria-label','Film review queue');const detail=el('section','admin-detail');detail.dataset.ffNoTrail='';detail.tabIndex=-1;
  main.append(toolbar,batchPanel(refresh,()=>records),status,stats,queue,detail);app.append(main);
- let records:FilmReference[]=[];let gates:Record<string,{processing:boolean;display:boolean}>={};let busy=false;let disposeMedia=()=>{};window.addEventListener('pagehide',()=>disposeMedia());
+ let logo:string|null=null;let records:FilmReference[]=[];let gates:Record<string,{processing:boolean;display:boolean}>={};let busy=false;let disposeMedia=()=>{};window.addEventListener('pagehide',()=>disposeMedia());
  const selected=()=>new URL(location.href).searchParams.get('id');
  function select(id:string){history.pushState(null,'',`/admin/references?id=${encodeURIComponent(id)}`);render();detail.focus();}
  window.addEventListener('popstate',render);filter.addEventListener('change',render);
- async function refresh(){try{const r=await fetch('/admin/references/api/queue');const data=await r.json();if(!r.ok)throw Error(data.error);records=data.candidates;gates=data.gates;render();}catch(e){status.textContent=e instanceof Error?e.message:'Queue unavailable.';}}
+ async function refresh(){try{const r=await fetch('/admin/references/api/queue');const data=await r.json();if(!r.ok)throw Error(data.error);records=data.candidates;gates=data.gates;logo=data.mediaProviders?.tmdbLogo??null;render();}catch(e){status.textContent=e instanceof Error?e.message:'Queue unavailable.';}}
  function render(){disposeMedia();queue.replaceChildren();detail.replaceChildren();stats.textContent=`${records.length} REFERENCES · ${records.filter(c=>c.status==='approved').length} APPROVED LOCALLY · 0 PUBLISHED · 0 MODEL CALLS`;
- for(const c of records.filter(c=>filter.value==='all'||filter.value===c.status)) {const card=button('',()=>select(c.id),'admin-card');card.dataset.id=c.id;card.setAttribute('aria-pressed',String(selected()===c.id));card.append(el('span','technical',`${c.year} / ${c.status.toUpperCase()}`),el('strong','',c.film),el('span','',c.scene));queue.append(card);}
+ for(const c of records.filter(c=>filter.value==='all'||filter.value===c.status)) {const card=button('',()=>select(c.id),'admin-card');card.dataset.id=c.id;card.setAttribute('aria-pressed',String(selected()===c.id));card.append(el('span','technical',`${c.year} / ${c.status.toUpperCase()}`),el('strong','',c.film),el('span','',c.scene));card.append(el('span','film-media-summary',mediaSummary(c)),el('span','technical',`COVER CANDIDATE / ${c.discovery?.covers[0]?.title??'Placeholder'}`),el('span','technical',`VIDEO CANDIDATE / ${c.discovery?.videos[0]?.title??'Source link only'}`),el('span','technical',c.discovery?.videos[0]?.sourceUrl??c.sourceUrl));queue.append(card);}
  if(!queue.children.length)queue.append(el('p','','No references match this status.'));
  const c=records.find(c=>c.id===selected());if(c)show(c);else if(selected())detail.append(el('p','','Reference not found.'));
  }
  function show(c:FilmReference){
  detail.append(el('h2','',c.film),el('p','technical',`${c.status.toUpperCase()} / REVISION ${c.version} / INSUFFICIENT EVIDENCE`),el('p','',`${c.director} · Cinematography: ${c.cinematographers.join(', ')} · ${c.publisher}`));
+ detail.append(link(`/compose/workspace?shot=1&film=${encodeURIComponent(c.id)}`,'Try in Compose →','technical-action'));
+ if(c.id==='film-discovery-04')detail.append(link('/admin/references/demo','OPEN PRIVATE END-TO-END DEMO ↗','technical-action'));
  const source=link(c.sourceUrl,'OPEN SOURCE ↗','technical-action');source.target='_blank';source.rel='noopener noreferrer';detail.append(source);
- detail.append(el('p','admin-notice',`Display permission: ${gates[c.id]?.display?'documented':'unverified'}. Local editing: ${c.media?.processingPermission?'authorized':'BLOCKED'}. AI analysis: disabled. Embed metadata: ${c.embedMetadataAvailable?'available; playback not verified':'unavailable'}.`));
- const imported=importPanel(c,refresh);detail.append(imported.root);disposeMedia=imported.dispose;
- detail.append(el('h3','','Research evidence'));
+ detail.append(el('p','admin-notice',`Display permission: ${gates[c.id]?.display?'documented':'unverified'}. Local editing: ${c.media?.processingPermission?'authorized':'BLOCKED'}. AI analysis: disabled. Embed metadata: ${c.embedMetadataAvailable?(c.mediaReview?.sourceUrl===c.media?.sourceUrl&&c.mediaReview?.playbackVerified?'available; browser playback reviewed':'available; playback not verified'):'unavailable'}.`));
+ const imported=importPanel(c,refresh);detail.append(imported.root);const discovery=discoveryPanel(c,refresh,logo);detail.append(discovery.root);disposeMedia=()=>{imported.dispose();discovery.dispose();};
+ detail.append(analysisPanel(),el('h3','','Research evidence'));
  for(const e of c.evidence){const a=link(e.url,'SOURCE / '+new URL(e.url).hostname,'technical-action');a.target='_blank';a.rel='noopener noreferrer';detail.append(a);}
- detail.append(el('p','','No direct visual observations or temporal analysis have been recorded. Technique labels are unverified for the selected excerpt.'));
+ if(c.observations.length){for(const o of c.observations)detail.append(el('p','',o.statement),el('p','technical',o.evidence.join(' · ')));}else detail.append(el('p','','No direct visual observations or temporal analysis have been recorded. Technique labels are unverified for the selected excerpt.'));
  for(const l of c.limitations)detail.append(el('p','technical',l));
  function field(label:string,value:string,rows=2){const wrap=el('label','film-field',label);const input=el('textarea');input.rows=rows;input.value=value;input.setAttribute('aria-label',label);wrap.append(input);detail.append(wrap);return input;}
  const title=field('Video title',c.title);const scene=field('Scene description',c.scene);const technique=field('Camera technique hypothesis',c.technique);

@@ -1,0 +1,3 @@
+import { archiveShell,pageTitle } from '../library/archive';
+import { el,link } from '../library/dom';
+export function renderAbout(app:HTMLElement){archiveShell(app);const main=el('main','clips-main');document.title='About — Framefield';main.append(pageTitle('ABOUT FRAMEFIELD','From intent to control.','A visual camera-reference workbench for generative media.'),el('p','','Explore references, separate observations from inferences, and shape a reusable prompt with deterministic camera controls. Creative defaults are not verified physical capture measurements.'),link('/','OPEN ORIGINAL INSTRUMENT →'),el('br'),link('/index','CONTROL INDEX →'),el('br'),link('/recipes','RECIPES →'));app.append(main);}

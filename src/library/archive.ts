@@ -1,3 +1,4 @@
+import { primaryNavigation,activeDestination } from '../navigation/routes';
 import { el, link } from './dom';
 import './library.css';
 import './archive.css';
@@ -8,9 +9,9 @@ export function archiveShell(app: HTMLElement) {
   app.replaceChildren();
   const header = el('header', 'archive-header');
   const nav = el('nav'); nav.setAttribute('aria-label', 'Main navigation');
-  for (const [href, label] of [['/', 'Instrument'], ['/index', 'Index'], ['/clips', 'Clips'], ['/recipes', 'Recipes']]) {
+  for (const [href, label] of primaryNavigation) {
     const item = link(href!, label!);
-    if (location.pathname === href) item.setAttribute('aria-current', 'page');
+    if (activeDestination(location.pathname) === href) item.setAttribute('aria-current', 'page');
     nav.append(item);
   }
   header.append(link('/', 'FRAMEFIELD', 'wordmark'), el('span', 'archive-edition', 'VISUAL CONTROL LIBRARY / VOL. 01'), nav);

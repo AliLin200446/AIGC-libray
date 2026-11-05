@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Framefield — Index page (R1). Import after pixel-theme.css. Prefix: .ix-
+   ========================================================================== */
+
+.ix {
+  max-width: 1360px; margin: 0 auto; box-sizing: border-box;
+  padding: 40px var(--ff-page-gutter, 40px) 72px;
+  display: flex; flex-direction: column; gap: 40px;
+  color: var(--ff-ink); font-family: var(--ff-interface);
+}
+.ix *, .ix *::before, .ix *::after { box-sizing: border-box; }
+.ix a { color: var(--ff-ink); text-decoration: none; }
+
+.ix-lab, .ix-id, .ix-chip, .ix-filter button, .ix-no, .ix-go {
+  font-family: var(--ff-technical); font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+}
+.ix-lab { font-size: 11px; color: var(--ff-secondary); }
+.ix .ff-px { width: 12px; }
+
+/* solid ground under reading blocks */
+.ix-intro, .ix-filterbar, .ix-family, .ix-about { background: var(--ff-paper); }
+
+/* ---------- intro ------------------------------------------------------- */
+.ix-intro { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; }
+.ix-intro-text { display: flex; flex-direction: column; gap: 14px; max-width: 560px; }
+.ix-h1 { margin: 0; font-family: var(--ff-display); font-size: clamp(44px, 5vw, 64px); line-height: .95; letter-spacing: -.04em; font-weight: 500; }
+.ix-lede { margin: 0; font-size: 18px; line-height: 1.45; color: #333632; }
+.ix-steps { flex: 1 1 560px; max-width: 720px; margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.ix-steps li { flex: 1 1 180px; display: flex; flex-direction: column; gap: 8px; padding: 16px; background: var(--ff-surface); box-shadow: inset 0 0 0 1px var(--ff-rule); }
+.ix-steps b { font-weight: 500; font-size: 15px; }
+.ix-steps li > span:last-child { font-size: 13px; line-height: 1.45; color: var(--ff-secondary); }
+.ix-no { font-size: 11px; color: var(--ff-lens); }
+
+/* ---------- filter ------------------------------------------------------ */
+.ix-filterbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.ix-filter { display: flex; flex-wrap: wrap; box-shadow: inset 0 0 0 1px var(--ff-ink); }
+.ix-filter button {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px;
+  border: 0; background: none; cursor: pointer; font-size: 12px; letter-spacing: .06em; color: var(--ff-ink);
+}
+.ix-filter button + button { box-shadow: inset 1px 0 0 var(--ff-rule); }
+.ix-filter button:hover { color: var(--ff-camera); }
+.ix-filter button[aria-pressed="true"] { background: var(--ff-ink); color: var(--ff-paper); }
+.ix-n { color: #8a8e88; }
+.ix-filter button[aria-pressed="true"] .ix-n { color: #c9ccc7; }
+
+/* ---------- family ------------------------------------------------------ */
+.ix-family { display: flex; flex-wrap: wrap; gap: 24px 48px; padding: 32px 0 8px; border-top: 1px solid var(--ff-ink); }
+.ix-family[hidden] { display: none; }
+.ix-rail { flex: 1 1 220px; max-width: 280px; display: flex; flex-direction: column; gap: 12px; }
+.ix-rail-kicker { display: flex; align-items: center; gap: 8px; }
+.ix-rail .ff-px { width: 14px; }
+.ix-rail h2 { margin: 0; font-family: var(--ff-display); font-size: 28px; line-height: 1.05; letter-spacing: -.02em; font-weight: 500; }
+.ix-rail p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ff-secondary); }
+
+.ix-grid { flex: 999 1 760px; min-width: 0; margin: 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+
+/* ---------- card -------------------------------------------------------- */
+/* border (not inset shadow): children's backgrounds would paint over an inset shadow */
+.ix-card { height: 100%; display: flex; flex-direction: column; background: var(--ff-surface); border: 1px solid var(--ff-rule); }
+.ix-card:hover { border-color: var(--ff-ink); box-shadow: 0 0 0 1px var(--ff-ink); }
+.ix-card:focus-visible { outline: none; border-color: var(--ff-camera); box-shadow: 0 0 0 1px var(--ff-camera); }
+.ix-thumb { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 1px solid var(--ff-rule); background: var(--ff-paper); }
+.ix-thumb-svg { display: block; width: 100%; height: 100%; }
+.ix-pixnum { position: absolute; left: 12px; top: 12px; width: 30%; max-width: 92px; padding: 4px; background: var(--ff-paper); }
+.ix-pixnum .ff-pixnum { width: 100%; }
+
+.ix-meta { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; flex: 1; }
+.ix-row { display: flex; justify-content: space-between; align-items: center; }
+.ix-id { font-size: 11px; color: var(--ff-secondary); }
+.ix-go { font-size: 13px; transition: transform 120ms steps(2); }
+.ix-card:hover .ix-go { transform: translateX(4px); color: var(--ff-camera); }
+.ix-title { font-size: 19px; font-weight: 500; letter-spacing: -.01em; }
+.ix-desc { font-size: 14px; line-height: 1.4; color: var(--ff-secondary); min-height: 2.8em; }
+.ix-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; }
+.ix-chip { font-size: 10px; padding: 4px 6px; }
+.ix-chip--canonical { background: var(--ff-ink); color: var(--ff-paper); }
+.ix-chip--draft, .ix-chip--tested { box-shadow: inset 0 0 0 1px var(--ff-ink); }
+.ix-chip--untested {
+  box-shadow: inset 0 0 0 1px #8a8e88; color: var(--ff-secondary);
+  background: repeating-linear-gradient(45deg, #f1f2ef 0 3px, var(--ff-paper) 3px 6px);
+}
+
+/* thumbnail SVG classes */
+.ix-thumb-svg .t-ink { stroke: var(--ff-ink); }
+.ix-thumb-svg .t-frame { stroke: var(--ff-ink); }
+.ix-thumb-svg .t-cam { stroke: var(--ff-camera); }
+.ix-thumb-svg .t-cam-fill { fill: var(--ff-camera); }
+.ix-thumb-svg .t-comp { stroke: var(--ff-composition); }
+.ix-thumb-svg .t-comp-fill { fill: var(--ff-composition); }
+.ix-thumb-svg .t-lens-stroke { stroke: var(--ff-lens); }
+.ix-thumb-svg .t-lens-fill { fill: var(--ff-lens); }
+.ix-thumb-svg .t-fov { fill: color-mix(in srgb, var(--ff-camera) 10%, transparent); }
+.ix-thumb-svg .t-mass { fill: #dcddd8; }
+.ix-thumb-svg .t-paper { fill: var(--ff-paper); }
+.ix-thumb-svg .t-cap text { font: 500 17px var(--ff-technical); letter-spacing: .08em; fill: var(--ff-secondary); }
+
+/* ---------- about ------------------------------------------------------- */
+.ix-about { display: flex; flex-wrap: wrap; gap: 24px 48px; padding-top: 24px; border-top: 1px solid var(--ff-rule); }
+.ix-about > .ix-lab { flex: 1 1 220px; max-width: 280px; }
+.ix-about > div { flex: 999 1 760px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px 32px; }
+.ix-about p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--ff-secondary); }
+
+/* ---------- phone ------------------------------------------------------- */
+@media (max-width: 720px) {
+  .ix { padding: 24px 16px 56px; gap: 32px; }
+  .ix-rail { max-width: none; }
+  .ix-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .ix-meta { padding: 12px; }
+  .ix-title { font-size: 16px; }
+  .ix-desc { font-size: 13px; }
+  .ix-filter { width: 100%; }
+  .ix-filter button { flex: 1 1 auto; justify-content: center; padding: 0 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .ix-go { transition: none; } }
+
+.index-main { max-width:none; padding:0; }
+.ix [hidden] { display:none !important; }
+.ix { overflow-wrap:anywhere; }
+.ix-no { color:var(--ff-ink); }
+.ix :is(a,button):focus-visible { outline:2px solid var(--ff-camera);outline-offset:4px; }
+.ix-chip--planned,.ix-chip--in-progress,.ix-chip--evaluated,.ix-chip--experimental,.ix-chip--deprecated { border:1px solid var(--ff-rule); }
+@media (min-width:1000px) { .ix-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }

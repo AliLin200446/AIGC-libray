@@ -20,3 +20,14 @@ local-clip-ingestion/
 
 # Private film-reference review decisions and permission evidence.
 local-film-references/
+
+/.env.local
+
+# Local authentication exports and private keys must never enter the submission.
+*.pem
+*.key
+cookies.txt
+cookies.json
+storage-state.json
+storageState.json
+.auth/

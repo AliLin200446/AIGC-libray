@@ -1,11 +1,11 @@
 import type { FilmReference } from './types';
-export interface DiscoveryResult { referenceId:string; sourceUrl:string; title:string; publisher:string; channelId:string|null; thumbnailUrl:string|null; embeddable:boolean|null; license:string|null; regionRestriction:unknown; permissionStatus:'unverified' }
+export interface DiscoveryResult { duration?:number|null; referenceId:string; sourceUrl:string; title:string; publisher:string; channelId:string|null; thumbnailUrl:string|null; embeddable:boolean|null; license:string|null; regionRestriction:unknown; permissionStatus:'unverified' }
 export interface FilmDiscoveryProvider { discover(reference:FilmReference):Promise<DiscoveryResult[]> }
 /** Offline adapter: the reviewed research sources, no network or media requests. */
 export class ResearchProvider implements FilmDiscoveryProvider {
  async discover(c:FilmReference):Promise<DiscoveryResult[]> {return [{referenceId:c.id,sourceUrl:c.sourceUrl,title:c.title,publisher:c.publisher,channelId:null,thumbnailUrl:c.thumbnailUrl,embeddable:null,license:null,regionRestriction:null,permissionStatus:'unverified'}];}
 }
-interface Video { id:string;snippet:{title:string;channelId:string;channelTitle:string;thumbnails?:{medium?:{url:string}}};status:{embeddable?:boolean;privacyStatus?:string;license?:string};contentDetails?:{regionRestriction?:unknown} }
+interface Video { id:string;snippet:{title:string;channelId:string;channelTitle:string;thumbnails?:{medium?:{url:string}}};status:{embeddable?:boolean;privacyStatus?:string;license?:string};contentDetails?:{regionRestriction?:unknown;duration?:string} }
 /** Metadata only. Fixed API origin, explicit channel allowlist, no audiovisual endpoint. */
 export class YouTubeDiscoveryProvider implements FilmDiscoveryProvider {
  private requests=0;
@@ -22,7 +22,7 @@ export class YouTubeDiscoveryProvider implements FilmDiscoveryProvider {
   const search=await this.api('search',{part:'snippet',type:'video',q:`${c.film} ${c.year} ${c.scene} official clip`,maxResults:'5'}) as {items?:{id?:{videoId?:string}}[]};
   const ids=(search.items??[]).map(i=>i.id?.videoId).filter((id):id is string=>typeof id==='string'&&/^[\w-]{11}$/.test(id)).slice(0,5);if(!ids.length)return [];
   const videos=await this.api('videos',{part:'snippet,status,contentDetails',id:ids.join(',')}) as {items?:Video[]};
-  return (videos.items??[]).filter(v=>/^[\w-]{11}$/.test(v.id)&&this.channels.has(v.snippet?.channelId)&&v.status?.privacyStatus==='public').map(v=>({referenceId:c.id,sourceUrl:`https://www.youtube.com/watch?v=${v.id}`,title:v.snippet.title,publisher:v.snippet.channelTitle,channelId:v.snippet.channelId,thumbnailUrl:v.snippet.thumbnails?.medium?.url??null,embeddable:v.status.embeddable===true,license:v.status.license??null,regionRestriction:v.contentDetails?.regionRestriction??null,permissionStatus:'unverified'}));
+  return (videos.items??[]).filter(v=>/^[\w-]{11}$/.test(v.id)&&this.channels.has(v.snippet?.channelId)&&v.status?.privacyStatus==='public').map(v=>({referenceId:c.id,sourceUrl:`https://www.youtube.com/watch?v=${v.id}`,title:v.snippet.title,publisher:v.snippet.channelTitle,channelId:v.snippet.channelId,thumbnailUrl:v.snippet.thumbnails?.medium?.url??null,embeddable:v.status.embeddable===true,license:v.status.license??null,regionRestriction:v.contentDetails?.regionRestriction??null,permissionStatus:'unverified',duration:parseDuration(v.contentDetails?.duration)}));
  }
 }
 export async function discoverBatch(references:FilmReference[],provider:FilmDiscoveryProvider,delayMs=1100) {
@@ -33,3 +33,5 @@ export async function discoverBatch(references:FilmReference[],provider:FilmDisc
  }
  return {status:'awaiting-review',results,errors,processingEnabled:false,publishingEnabled:false};
 }
+
+export function parseDuration(value?:string):number|null {const m=/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?$/.exec(value??'');if(!m)return null;const n=Number(m[1]??0)*3600+Number(m[2]??0)*60+Number(m[3]??0);return n>0?n:null;}

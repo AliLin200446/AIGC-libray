@@ -230,3 +230,84 @@
 .compose-camera-spec button { display:block;text-align:left; }
 @media(min-width:701px) { .compose-precision { max-height:clamp(350px,calc(100svh - 315px),600px);overflow:auto;padding-right:6px;scrollbar-width:thin; } }
 .compose-open .instrument-frame[data-compose-view=world] .technical-annotation,.compose-open .instrument-frame[data-compose-view=plan] .technical-annotation { display:none; }
+.instrument-shot-cta { display:flex;justify-content:center;padding:32px 20px 48px; }
+.instrument-shot-button { display:inline-flex;align-items:center;gap:12px;padding:18px 28px;background:var(--ff-ink);color:var(--ff-paper);font:500 12px var(--ff-technical);letter-spacing:.08em;border:1px solid var(--ff-ink); }
+.instrument-shot-button::before { content:'';width:12px;height:16px;background:currentColor;clip-path:polygon(0 0,33% 0,33% 25%,66% 25%,66% 40%,100% 40%,100% 60%,66% 60%,66% 75%,33% 75%,33% 100%,0 100%); }
+.instrument-shot-button:hover { background:var(--ff-paper);color:var(--ff-ink); }
+.instrument-shot-button:focus-visible { outline:2px solid var(--ff-camera);outline-offset:5px; }
+.instrument-shot-cta .instrument-shot-button { color:var(--ff-paper);background:var(--ff-ink); }
+.instrument-shot-cta .instrument-shot-button:hover { color:var(--ff-ink);background:var(--ff-paper); }
+
+/* P1: the frame is centered in the full canvas, with equal side-control space.
+   Reserve the measured header and ruler before fitting the original 8:5 frame. */
+.instrument-page:not(.compose-open) .camera-instrument.instrument-surface {
+ flex:none; min-height:0; padding:164px 0 220px; align-items:flex-start;
+}
+.instrument-page:not(.compose-open) .camera-instrument .instrument-frame {
+ width:min(calc(100% - 400px),calc((100dvh - var(--instrument-header-height,100px) - 190px) * 1.6),1200px);
+ min-width:0; aspect-ratio:8 / 5; margin-inline:auto;
+}
+.instrument-page:not(.compose-open) .camera-instrument .zone-lens {
+ width:100%; left:50%; top:auto; bottom:100%; transform:translateX(-50%); padding:0 0 18px;
+}
+.instrument-page:not(.compose-open) .camera-instrument :is(.zone-composition,.zone-camera) {
+ top:50%; bottom:auto; transform:translateY(-50%); width:190px; padding:12px 18px; text-align:left;
+}
+.instrument-page:not(.compose-open) .camera-instrument .zone-composition { left:auto;right:100%; }
+.instrument-page:not(.compose-open) .camera-instrument .zone-camera { left:100%;right:auto; }
+.instrument-page:not(.compose-open) .camera-instrument .instrument-caption { padding-top:38px; }
+@media(max-width:700px) {
+ .instrument-page:not(.compose-open) .camera-instrument.instrument-surface { padding:210px 20px 470px; }
+ .instrument-page:not(.compose-open) .camera-instrument .instrument-frame { width:100%; }
+ .instrument-page:not(.compose-open) .camera-instrument :is(.zone-composition,.zone-camera) {
+  top:calc(100% + 18px); transform:none; width:48%; padding:0; text-align:left;
+ }
+ .instrument-page:not(.compose-open) .camera-instrument .zone-composition { left:0;right:auto; }
+ .instrument-page:not(.compose-open) .camera-instrument .zone-camera { left:auto;right:0; }
+ .instrument-page:not(.compose-open) .camera-instrument .instrument-caption { top:calc(100% + 255px);padding-top:16px; }
+ .instrument-page:not(.compose-open) .camera-instrument .zone-controls { height:auto; }
+ .instrument-page:not(.compose-open) .camera-instrument .instrument-control { min-height:38px; }
+ .instrument-page:not(.compose-open) .camera-instrument .ff-focal-pix { max-width:110px; }
+}
+
+/* The full P1 application, not just its frame, shares one height budget. */
+@media(min-width:801px) {
+ .instrument-page:not(.compose-open) #app:has(.camera-instrument) {
+  height:100dvh;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;
+ }
+ .instrument-page:not(.compose-open) .camera-instrument.instrument-surface {
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;min-height:0;padding:8px 0;
+ }
+ .instrument-page:not(.compose-open) .camera-instrument .instrument-frame-slot {
+  min-height:0;margin-inline:200px;container-type:size;display:grid;place-items:center;
+ }
+ .instrument-page:not(.compose-open) .camera-instrument .instrument-frame {
+  width:min(100cqw,160cqh);margin:0;min-height:0;
+ }
+ .instrument-page:not(.compose-open) .camera-instrument > .zone-lens {
+  position:relative;inset:auto;transform:none;justify-self:center;width:min(680px,calc(100% - 400px));padding:0;
+ }
+ .instrument-page:not(.compose-open) .camera-instrument > .instrument-caption {
+  position:static;justify-self:center;width:min(900px,calc(100% - 400px));padding:0;min-height:0;gap:2px 20px;
+ }
+ .instrument-page:not(.compose-open) .camera-instrument .active-name {font-size:clamp(26px,3.5dvh,40px);}
+ .instrument-page:not(.compose-open) .camera-instrument .active-description {font-size:14px;}
+ .instrument-page:not(.compose-open) .camera-instrument .ff-focal-pix {max-width:130px;}
+ .instrument-page:not(.compose-open) .camera-instrument :is(.zone-composition,.zone-camera) {padding-block:0;}
+ .instrument-page:not(.compose-open) .camera-instrument .zone-controls {gap:0;padding-top:4px;}
+ .instrument-page:not(.compose-open) .instrument-shot-cta {padding:6px 20px;}
+ .instrument-page:not(.compose-open) .instrument-shot-button {padding:10px 24px;}
+ .instrument-page:not(.compose-open) .instrument-footer {padding:8px 24px;}
+}
+@media(max-width:800px) {
+ .instrument-page .camera-instrument > .zone-lens {position:relative;inset:auto;transform:none;width:100%;padding:0 0 16px;}
+ .instrument-page:not(.compose-open) .camera-instrument.instrument-surface {display:block;padding:12px 20px 16px;}
+ .instrument-page:not(.compose-open) .camera-instrument .instrument-frame {width:100%;}
+ .instrument-page:not(.compose-open) .camera-instrument > .instrument-caption {position:relative;top:auto;width:100%;margin-top:265px;padding-top:0;}
+ .instrument-page:not(.compose-open) .camera-instrument :is(.zone-composition,.zone-camera) {top:calc(100% + 18px);transform:none;width:48%;padding:0;text-align:left;}
+ .instrument-page:not(.compose-open) .camera-instrument .zone-composition {left:0;right:auto;}
+ .instrument-page:not(.compose-open) .camera-instrument .zone-camera {left:auto;right:0;}
+}
+@media(min-width:801px) {
+ .instrument-page:not(.compose-open) .camera-instrument.instrument-surface {grid-template-columns:minmax(0,1fr);justify-content:normal;align-items:stretch;}
+}

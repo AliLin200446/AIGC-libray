@@ -1,3 +1,5 @@
+import {shotHref, instrumentSettings} from '../../playground/instrument-handoff';
+import { primaryNavigation,activeDestination } from '../../navigation/routes';
 import { parseRemix,remixKey } from '../../recipes/model';
 import { replaceFamily,remixLimitations } from '../../recipes/remix';
 import '../../recipes/recipes.css';
@@ -70,8 +72,8 @@ export function renderInstrument(app: HTMLElement): void {
   function setComposing(value:boolean){composing=value;document.body.classList.toggle('compose-open',value);modeState(composeMode,value);modeState(exploreMode,!value);if(value)modeState(referenceMode,false);composeUI.setEnabled(value);syncDiscovery();}
   const referenceMode=button('REFERENCE ↗',()=>{void openReference();});
   const navigation=el('nav','instrument-nav'); navigation.setAttribute('aria-label','Library modes');
-  navigation.append(exploreMode,composeMode,referenceMode,link('/clips','CLIPS ↗','recipes-nav'),link('/recipes','RECIPES ↗','recipes-nav'),indexToggle);header.append(wordmark,navigation);
-  const surface=el('section','instrument-surface'); surface.setAttribute('aria-label','Visual control instrument'); surface.dataset.state='idle';
+  for(const[href,label]of primaryNavigation){const item=link(href,label,'recipes-nav');if(activeDestination(location.pathname)===href)item.setAttribute('aria-current','page');navigation.append(item);}header.append(wordmark,navigation);
+  const surface=el('section','instrument-surface camera-instrument'); surface.setAttribute('aria-label','Visual control instrument'); surface.dataset.state='idle';
   const frame=el('div','instrument-frame');
   const viewport=el('div','instrument-viewport'); viewport.dataset.demonstration='deterministic-visual-vocabulary';
   const guides=el('div','instrument-guides'); guides.setAttribute('aria-hidden','true');
@@ -126,7 +128,7 @@ export function renderInstrument(app: HTMLElement): void {
   function scheduleReturn() {if(remix || composing || ruler.dragging || category==='lens')return;cancelReturn();if(surface.dataset.view&&surface.dataset.view!=='explore')return;returnTimer=setTimeout(neutral,160);}
   function syncDiscovery() {
     const exploring=!composing&&(!surface.dataset.view||surface.dataset.view==='explore');
-    zones.forEach((zone,key)=>{const shown=key===category||(key==='lens'&&(exploring||composing));zone.dataset.revealed=String(shown);categories.get(key)?.setAttribute('aria-expanded',String(shown));});
+    zones.forEach((zone,key)=>{const shown=exploring||key===category||(key==='lens'&&composing);zone.dataset.revealed=String(shown);categories.get(key)?.setAttribute('aria-expanded',String(shown));});
   }
   function discover(next: ControlCategory|null) {
     if(collapseTimer!==undefined)clearTimeout(collapseTimer);
@@ -211,7 +213,21 @@ export function renderInstrument(app: HTMLElement): void {
   const footer=el('footer','instrument-footer');
   footer.append(el('span','','Visual Control Library for Generative Media'),el('span','desktop-hint','Approach an edge. Find a different view.'),el('span','touch-hint','Tap a category, then a control. Explore to go deeper.'),el('span','','DETERMINISTIC DEMONSTRATION'));
   app.append(header,remixBanner,surface,index,footer);
+  const headerSize=new ResizeObserver(()=>surface.style.setProperty('--instrument-header-height',`${header.getBoundingClientRect().height}px`));
+  headerSize.observe(header);
+  const shotRow=el('div','instrument-shot-cta');
+  const tryShot=link('/compose/workspace?shot=1','TRY THE SHOT →','instrument-shot-button');shotRow.append(tryShot);surface.after(shotRow);
+  tryShot.addEventListener('pointerenter',cancelReturn);tryShot.addEventListener('focus',cancelReturn);
+  tryShot.addEventListener('click',()=>{
+    cancelReturn();const settings=instrumentSettings(scene?.getFocalLength()??50,guides.dataset.control,active);
+    history.replaceState({...history.state,instrumentHandoff:settings},'',location.href);
+    tryShot.href=shotHref(settings.focalLength,settings.composition,settings.movement);
+  });
   const composeUI=createComposeUI(frame,()=>scene);
+  const frameSlot=el('div','instrument-frame-slot');
+  const sceneWorkspace=frame.parentElement!;
+  sceneWorkspace.before(frameSlot);frameSlot.append(sceneWorkspace);
+  surface.prepend(zones.get('lens')!);surface.append(caption);
   function mountReference(createReferenceMode: typeof import('../reference/reference').createReferenceMode) {
     reference=createReferenceMode({frame,surface,onView:(view,stack)=>{
     setComposing(false);cancelReturn();discover(null);index.hidden=true;indexToggle.setAttribute('aria-expanded','false');
@@ -236,7 +252,12 @@ export function renderInstrument(app: HTMLElement): void {
   const initial=window.location.hash.slice(1);
   if(initial==='camera'||initial==='lens'||initial==='composition')discover(initial);
   else syncDiscovery();
-  const dispose=()=>{disposed=true;cancelReturn();if(collapseTimer!==undefined)clearTimeout(collapseTimer);reference?.dispose();composeUI.dispose();ruler.dispose();scene?.dispose();document.removeEventListener('keydown',keydown);};
-  window.addEventListener('pagehide',event=>{if(!event.persisted)dispose();});
+  const restored=history.state?.instrumentHandoff;
+  if(restored){const value=instrumentSettings(restored.focalLength,restored.composition,restored.movement);scene?.applyStack([value.composition]);scene?.setFocalLength(value.focalLength,true);guides.dataset.control=value.composition;ruler.render(value.focalLength);lensCaption(value.focalLength);}
+  if(new URLSearchParams(location.search).has('image'))void openReference();
+  if(new URLSearchParams(location.search).get('edit')==='1')setComposing(true);
+  const dispose=()=>{disposed=true;headerSize.disconnect();cancelReturn();if(collapseTimer!==undefined)clearTimeout(collapseTimer);reference?.dispose();composeUI.dispose();ruler.dispose();scene?.dispose();document.removeEventListener('keydown',keydown);};
+  window.addEventListener('pagehide',event=>{if(!event.persisted)dispose();else scene?.setPaused(true);});
+  window.addEventListener('pageshow',event=>{if(event.persisted)scene?.setPaused(false);});
   if(import.meta.hot)import.meta.hot.dispose(dispose);
 }

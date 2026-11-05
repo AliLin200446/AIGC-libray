@@ -1,3 +1,4 @@
+import {createAnalyzeHandler} from './analyze';
 import { createServer } from 'node:http';
 import { existsSync } from 'node:fs';
 import { loadEnvFile } from 'node:process';
@@ -7,7 +8,8 @@ import { referenceNode } from './reference-node';
 import { serverConfig } from './openai';
 for (const file of ['.env.local','.env']) if (existsSync(file)) loadEnvFile(file);
 const analysis = referenceNode(createPublicReferenceHandler(serverConfig(process.env)));
+const nim=createAnalyzeHandler(process.env.NVIDIA_API_KEY);
 const site = staticSite('dist');
-const server = createServer((req,res) => { void (req.url?.split('?')[0] === '/api/reference-analysis' ? analysis(req,res) : site(req,res)); });
-server.requestTimeout = 15000; server.headersTimeout = 10000;
+const server = createServer((req,res) => { void (req.url?.split('?')[0] === '/api/analyze' ? nim(req,res) : req.url?.split('?')[0] === '/api/reference-analysis' ? analysis(req,res) : site(req,res)); });
+server.requestTimeout = 100000; server.headersTimeout = 10000;
 server.listen(Number(process.env.PORT ?? 5175), '127.0.0.1', () => console.log('Framefield local production preview ready.'));

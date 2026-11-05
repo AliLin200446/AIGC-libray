@@ -81,6 +81,7 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const block = o.blockSelector ? `${DEFAULT_BLOCK},${o.blockSelector}` : DEFAULT_BLOCK;
   let pal = readPalette();
+  let palReady=false;
 
   /* ---------- canvas ---------- */
   const canvas = document.createElement('canvas');
@@ -336,7 +337,7 @@ export function initPixelInteractions(opts: PixelFxOptions = {}): () => void {
   }
 
   /* ---------- wiring ---------- */
-  const onPointerMove = (e: PointerEvent) => { onMove(e); onVpMove(e); onRulerMove(e); };
+  const onPointerMove = (e: PointerEvent) => { if(!palReady){pal=readPalette();palReady=true;} onMove(e); onVpMove(e); onRulerMove(e); };
   function stopEffects() {
     cancelAnimationFrame(raf); raf = 0; last = 0; lastMove = -Infinity;
     parts.length = 0; wake = 0; overBlank = false; travel = 0; px = -1; py = -1; touch = undefined;

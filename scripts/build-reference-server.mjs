@@ -12,3 +12,4 @@ await build({
     context.onLoad({ filter: /[/\\]server[/\\]prompt\.ts$/ }, () => ({ contents: `export async function readCanonicalPrompt() { return ${JSON.stringify(prompt)}; }`, loader: 'js' }));
   } }],
 });
+await build({entryPoints:['server/analyze-function.ts'],outfile:'server-build/analyze-function.mjs',bundle:true,platform:'node',format:'esm',target:'node24',sourcemap:false,external:['sharp']});

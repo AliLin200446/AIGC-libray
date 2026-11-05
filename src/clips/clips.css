@@ -24,24 +24,60 @@
 .clip-card:hover .clip-caption { border-color:var(--ff-moss); }
 .clip-empty { grid-column:1/-1;padding:50px 0;min-height:350px; }
 .clip-empty p { margin:16px 0 !important;color:var(--ff-moss); }
-.clips-main > .back-link { display:inline-block;margin:24px 0 !important; }
 .clips-main > .clip-media { max-height:70vh;max-width:1100px;margin:0 auto; }
 .clips-main > .clip-media:has(video) .clip-media-status { bottom:60px; }
-.clip-detail-columns { display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,96px);margin-top:40px; }
-.clip-prompt { background:var(--ff-surface);padding:28px;align-self:start; }
-.clip-prompt > p:not(.technical):not(.clip-prompt-note) { font-size:20px;line-height:1.6;letter-spacing:-.02em;margin:24px 0;white-space:pre-wrap; }
 .clips-page .clip-copy { background:var(--ff-moss);color:var(--ff-paper);padding:13px 24px;width:100%;transition:background 240ms ease; }
 .clips-page .clip-copy:hover { background:var(--ff-ink); }
-.clip-prompt [role=status] { min-height:42px;padding-top:10px; }
-.clip-prompt-note { font-size:12px;color:var(--ff-secondary); }
-.clip-related { margin-top:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center; }
-.clip-related p { width:100%; }
-.clip-evidence { border-top:1px solid var(--ff-rule);margin-top:60px;padding-top:24px;max-width:900px; }
-.clip-evidence h3 { margin:24px 0 10px;font-size:18px; }
-.clip-evidence p { font-size:13px;line-height:1.8;color:var(--ff-secondary); }
-.clip-evidence a { display:inline-block;margin:12px 20px 0 0; }
 @media(max-width:1100px) { .clip-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .clip-layout { grid-template-columns:170px minmax(0,1fr); } }
-@media(max-width:700px) { .clip-layout { grid-template-columns:1fr; } .clip-filters { display:grid;grid-template-columns:1fr 1fr;gap:0 20px; } .clip-filters>h2,.clip-filter-help { grid-column:1/-1; } .clip-grid { grid-template-columns:1fr; } .clip-detail-columns { grid-template-columns:1fr; } .clip-filters > button { grid-column:1/-1;justify-self:start; } .clips-page .archive-header { flex-wrap:wrap;gap:8px 20px;padding:16px 0; } .clips-page .archive-header nav { gap:20px; } .clips-page .archive-edition { display:none; } .clip-prompt { padding:22px; } }
+@media(max-width:700px) { .clip-layout { grid-template-columns:1fr; } .clip-filters { display:grid;grid-template-columns:1fr 1fr;gap:0 20px; } .clip-filters>h2,.clip-filter-help { grid-column:1/-1; } .clip-grid { grid-template-columns:1fr; } .clip-filters > button { grid-column:1/-1;justify-self:start; } .clips-page .archive-header { flex-wrap:wrap;gap:8px 20px;padding:16px 0; } .clips-page .archive-header nav { gap:20px; } .clips-page .archive-edition { display:none; } }
 @media(prefers-reduced-motion:reduce) { .clips-page *, .clips-page *::before, .clips-page *::after { transition:none !important;scroll-behavior:auto !important; } }
 
 .clips-main > .clip-media video { object-fit:contain; }
+.clip-media iframe { position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2; }
+.clip-media > button { position:absolute;bottom:24px;left:24px;z-index:1; }
+
+.clips-main > .technical-action { margin-inline-end:16px; }
+
+/* Transparent decorations preserve the original dotted canvas and document geometry. */
+.clip-pixel-host--hero,.clip-pixel-host--footer { position:relative;isolation:isolate; }
+.clip-pixel-composition { position:absolute;pointer-events:none;z-index:-1;overflow:hidden; }
+.clip-pixel-composition--hero { width:52%;height:100%;right:17%;top:0; }
+.clip-pixel-composition--footer { width:40%;height:180px;right:12%;bottom:0; }
+.clip-pixel-host--hero h1 { position:relative;text-shadow:0 0 7px var(--ff-paper),0 0 3px var(--ff-paper); }
+.clip-pixel-host--footer > :not(svg) { position:relative; }
+.clip-pixel-layer { animation:clip-fragment-drift 18s steps(18,end) infinite alternate;animation-delay:calc(var(--layer) * -5s);animation-play-state:paused; }
+.clip-pixel-composition--footer .clip-pixel-layer { animation-direction:alternate-reverse;animation-duration:24s; }
+.clip-pixel-composition.is-running .clip-pixel-layer { animation-play-state:running; }
+@keyframes clip-fragment-drift { from { transform:translate(-5px,5px); } to { transform:translate(7px,-7px); } }
+.clip-card { border-radius:6px;box-shadow:0 0 0 1px transparent;transition:transform 240ms ease,box-shadow 240ms ease; }
+.clip-card .clip-media { border-radius:6px; }
+@media (hover:hover) and (pointer:fine) {
+ .clip-card:hover { transform:translateY(-3px);box-shadow:0 8px 18px color-mix(in srgb,var(--ff-ink) 7%,transparent),0 0 0 1px var(--ff-rule); }
+}
+.clip-card:focus-visible { box-shadow:0 0 0 1px var(--ff-ink);outline:2px solid var(--ff-ink);outline-offset:5px; }
+@media(max-width:700px) {
+ .clip-pixel-composition--hero { width:75%;right:0;height:70%;top:4%;opacity:.7; }
+ .clip-pixel-composition--footer { width:65%;right:0;height:130px;opacity:.65; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .clip-pixel-layer { animation:none !important;transform:none; }
+ .clip-card:hover { transform:none; }
+}
+
+/* Intent affordance only: no players or autoplay in the grid. */
+.clip-play-affordance { position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:12px 16px;background:var(--ff-paper);color:var(--ff-ink);opacity:0;pointer-events:none;transition:opacity 200ms; }
+.clip-card:hover .clip-play-affordance,.clip-card:focus-within .clip-play-affordance { opacity:1; }
+@media (prefers-reduced-motion:reduce) { .clip-play-affordance { transition:none; } }
+
+/* Unavailable film covers are honest empty frames, never camera diagrams. */
+.clip-media--unavailable { background:var(--ff-media-surface); }
+.clip-media--unavailable .clip-media-status { left:16px;bottom:16px;background:transparent;padding:0; }
+.clip-media img[hidden], .clip-media video[hidden] { display:none; }
+.clip-card .clip-media video { pointer-events:none; }
+@media (hover:hover) and (pointer:fine) {
+ .clip-card .clip-media img { transition:transform 240ms ease; }
+ .clip-card:hover .clip-media img { transform:scale(1.015); }
+}
+@media(prefers-reduced-motion:reduce) { .clip-card:hover .clip-media img { transform:none; } }
+.clip-film-reference-title { position:absolute;inset:18px 22px 50px;display:flex;flex-direction:column;justify-content:center;gap:10px;font-size:clamp(22px,2.4vw,36px);line-height:1.05;letter-spacing:-.04em;color:var(--ff-ink); }
+.clip-film-reference-title small { font-family:var(--ff-technical);font-size:9px;letter-spacing:.06em;line-height:1.4; }

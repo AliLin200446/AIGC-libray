@@ -1,21 +1,23 @@
+import {canonicalRoute} from '../src/navigation/routes';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { clips } from '../src/clips/data';
 import { controls } from '../src/controls';
-const detailPaths = new Set([...controls.map(c => `/library/${c.id}`), '/clips', ...clips.map(c => `/clips/${c.id}`)]);
+const detailPaths = new Set([...controls.map(c => `/library/${c.id}`), '/compose','/compose/workspace','/analyze','/explore', ...clips.map(c => `/explore/${c.id}`)]);
 const mime: Record<string,string> = { '.js':'text/javascript', '.css':'text/css', '.html':'text/html', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.xml':'application/xml', '.txt':'text/plain', '.mp4':'video/mp4', '.webm':'video/webm' };
 export function staticSite(directory: string) {
   const root = resolve(directory);
   return async (req: IncomingMessage, res: ServerResponse) => {
-    const headers = { 'X-Content-Type-Options':'nosniff', 'Referrer-Policy':'strict-origin-when-cross-origin', 'Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'" };
+    const headers = { 'X-Content-Type-Options':'nosniff', 'Referrer-Policy':'strict-origin-when-cross-origin', 'Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://image.tmdb.org https://i.ytimg.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'" };
     try {
       if(req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405, headers); res.end(); return; }
       const url = new URL(req.url ?? '/', 'http://internal');
       const pathname = decodeURIComponent(url.pathname);
       if (pathname === '/library' || pathname === '/library/') { res.writeHead(301, { ...headers, Location: '/' + url.search }); res.end(); return; }
+      const destination=canonicalRoute(pathname,url.search);if(destination!==pathname+url.search&&pathname.replace(/\/$/,'')!==destination.split('?')[0]){res.writeHead(302,{...headers,Location:destination});res.end();return;}
       const clean = pathname.replace(/\/$/, '');
-      const route = pathname === '/' ? '/index.html' : (clean==='/index'||detailPaths.has(clean)||/^\/clips\/pexels-[1-9]\d*$/.test(clean)||/^\/recipes(?:\/[-a-z0-9]+)?$/.test(clean)) ? `${clean}/index.html` : pathname;
+      const route = pathname === '/' ? '/index.html' : (clean==='/index'||detailPaths.has(clean)||/^\/explore\/(?:demo-(?:dolly|tracking|pan|orbit)|pexels-[1-9]\d*|film-discovery-(?:0[1-9]|1[0123]))$/.test(clean)||/^\/recipes(?:\/[-a-z0-9]+)?$/.test(clean)) ? `${clean}/index.html` : pathname;
       let file = resolve(root, '.' + route), status = 200;
       if (!file.startsWith(root + sep) || pathname.startsWith('/dev/') || pathname.startsWith('/api/')) { file = resolve(root, '404.html'); status = 404; }
       try { if (!(await stat(file)).isFile()) throw new Error('Not a file'); } catch { file = resolve(root, '404.html'); status = 404; }

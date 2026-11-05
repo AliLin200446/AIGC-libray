@@ -4,6 +4,9 @@ export const scopes = ['embed', 'store', 'display', 'download', 'edit', 'host', 
 export type Scope = typeof scopes[number];
 export interface Grant { evidence: string; reviewer: string; verifiedAt: string; expiresAt: string }
 export interface FilmReference {
+  discovery?: import('./media-discovery').MediaDiscovery;
+  cover?: import('./media-discovery').CoverSelection;
+  mediaReview?: import('./media-discovery').MediaReview;
   id: string; version: number; film: string; year: number; director: string; cinematographers: string[];
   title: string; sourceUrl: string; publisher: string; thumbnailUrl: string | null;
   embedUrl: string | null; embedMetadataAvailable: boolean;

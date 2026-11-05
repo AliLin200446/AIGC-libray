@@ -1,3 +1,4 @@
+import { discoverMedia, reviewMedia, mediaAvailability } from './media-discovery';
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { importUrls, receiveUpload, importUpload, selectClip, assetFile, canServe, maxUploadBytes } from './import';
@@ -15,7 +16,7 @@ export function filmReviewMiddleware(root=process.cwd()) {
     const host=req.headers.host??'';const hostname=new URL('http://'+host).hostname;
     if(!['localhost','127.0.0.1','[::1]'].includes(hostname)||!['127.0.0.1','::1','::ffff:127.0.0.1'].includes(req.socket.remoteAddress??''))throw Error('Local review only.');
     if(req.headers['sec-fetch-site']==='cross-site'||(req.headers.origin&&new URL(req.headers.origin).host!==host))throw Error('Cross-origin request rejected.');
-    if(path==='/admin/references/api/queue'&&req.method==='GET') {const candidates=await readReferences(root);send(200,{candidates,gates:Object.fromEntries(candidates.map(c=>[c.id,{processing:processingAllowed(c),display:displayAllowed(c)}])),publishingEnabled:false,processingEnabled:true});return;}
+    if(path==='/admin/references/api/queue'&&req.method==='GET') {const candidates=await readReferences(root);send(200,{mediaProviders:mediaAvailability(root),candidates,gates:Object.fromEntries(candidates.map(c=>[c.id,{processing:processingAllowed(c),display:displayAllowed(c)}])),publishingEnabled:false,processingEnabled:true});return;}
     const media=/^\/admin\/references\/api\/media\/(film-discovery-\d{2})\/(original|optimized|poster)$/.exec(path);
     if(media&&(req.method==='GET'||req.method==='HEAD')) {
      const c=(await readReferences(root)).find(c=>c.id===media[1]);if(!c||!canServe(c,media[2]!))throw Error('Local playback permission missing or revoked.');
@@ -27,7 +28,7 @@ export function filmReviewMiddleware(root=process.cwd()) {
      res.setHeader('Content-Type',media[2]==='poster'?'image/jpeg':media[2]==='original'?m.mimeType!:'video/mp4');res.setHeader('Content-Length',end-start+1);res.setHeader('Accept-Ranges','bytes');res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');
      if(req.method==='HEAD')res.end();else {const stream=createReadStream(file,{start,end});stream.on('error',()=>res.destroy());res.on('close',()=>stream.destroy());stream.pipe(res);}return;
     }
-    const actions=['review','import-url','import-manifest','upload','select','prepare'];
+    const actions=['discover-media','review-media','review','import-url','import-manifest','upload','select','prepare'];
     const action=path.slice('/admin/references/api/'.length);
     if(actions.includes(action)&&req.method==='POST') {
      if(action==='upload') {
@@ -40,7 +41,9 @@ export function filmReviewMiddleware(root=process.cwd()) {
      if(!req.headers.origin||req.headers['x-framefield-review']!=='1'||req.headers['content-type']!=='application/json')throw Error('Same-origin JSON review required.');
      const chunks:Buffer[]=[];let total=0;for await(const chunk of req){const b=Buffer.from(chunk);total+=b.length;if(total>65536)throw Error('Request too large.');chunks.push(b);}
      const body=JSON.parse(Buffer.concat(chunks).toString());
-     if(action==='review')send(200,{candidate:await reviewReference(root,body as ReviewInput)});
+     if(action==='discover-media'){if(!['cover','video','all'].includes(body.kind))throw Error('Invalid discovery kind.');send(200,await discoverMedia(root,body.kind,body.id));}
+     else if(action==='review-media')send(200,{candidate:await reviewMedia(root,body)});
+     else if(action==='review')send(200,{candidate:await reviewReference(root,body as ReviewInput)});
      else if(action==='import-url')send(200,{candidates:await importUrls(root,[body as ImportInput])});
      else if(action==='import-manifest')send(200,{candidates:await importUrls(root,parseManifest(body.manifest))});
      else send(200,{candidate:await selectClip(root,body as ImportInput,action==='prepare')});return;

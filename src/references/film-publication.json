@@ -1,0 +1,76 @@
+[
+  {
+    "id": "film-discovery-05",
+    "film": "The Shining",
+    "year": 1980,
+    "title": "The Shining",
+    "description": "Tracking Shot",
+    "technique": "Low following tracking shot",
+    "prompt": "A continuous low tracking shot follows a child riding a tricycle through a long corridor. Keep a medium-wide rear view with the rider centered, the camera near wheel height, and a steady gap behind the subject. Use a wide field of view to retain the floor, nearby doorframes and distant vanishing point, without prescribing an exact focal length. Match the rider\u2019s measured pace with smooth forward translation and gentle turns; nearby doorframes should pass faster than distant architectural features. Keep focal length fixed. No zoom, overtaking, abrupt acceleration, cuts, exaggerated shake or impossible passage through walls.",
+    "sourceUrl": "https://www.youtube.com/watch?v=CMbI7DmLCNI",
+    "attribution": "Movieclips / YouTube \u00b7 The Shining (1980) - Come Play With Us Scene (2/7) | Movieclips",
+    "embedUrl": "https://www.youtube.com/embed/CMbI7DmLCNI",
+    "startTime": 0,
+    "duration": 148,
+    "publicationApproved": true,
+    "review": {
+      "sceneEvidence": "Browser inspection of the official player on 2026-11-04. Opening corridor passage before 00:23: a child rides a tricycle away from the viewpoint; successive views advance through doorways at low height behind the child. At 00:23 the rear view faces two girls at the corridor end. Film/scene match confirmed against visible content and Movieclips attribution. Low following tracking is supported by temporal viewpoint changes, not a single frame; exact rig, speed and focal length remain unverified. Player duration displayed 2:28. The full upload includes cuts; this is not an isolated continuous 148-second tracking shot.",
+      "playbackVerified": true
+    },
+    "embedGrant": {
+      "evidence": "Conditional official-player display in FRAMEFIELD: https://www.youtube.com/static?template=terms (Permissions and Restrictions; License to Other Users), https://support.google.com/youtube/answer/171780 . Publisher provenance: https://editorial.rottentomatoes.com/article/rotten-tomatoes-and-movieclips-are-joining-forces/ . Exact source: https://www.youtube.com/watch?v=CMbI7DmLCNI. Browser playback rechecked 2026-11-04. User requested attachment to public-facing prototype; no deployment. This is platform-enabled embedding, not a separate film license or unrestricted redistribution. Preserve provider controls/branding; no downloading, editing, hosting, AI processing or access charges. Subject to availability, applicable restrictions and terms. Expiry is an internal re-review deadline, not a provider license expiry.",
+      "reviewer": "Codex \u2014 user-requested curated embed review",
+      "verifiedAt": "2026-11-04T20:03:54.302Z",
+      "expiresAt": "2026-12-04T00:00:00.000Z"
+    },
+    "publicDisplayGrant": {
+      "evidence": "Conditional official-player display in FRAMEFIELD: https://www.youtube.com/static?template=terms (Permissions and Restrictions; License to Other Users), https://support.google.com/youtube/answer/171780 . Publisher provenance: https://editorial.rottentomatoes.com/article/rotten-tomatoes-and-movieclips-are-joining-forces/ . Exact source: https://www.youtube.com/watch?v=CMbI7DmLCNI. Browser playback rechecked 2026-11-04. User requested attachment to public-facing prototype; no deployment. This is platform-enabled embedding, not a separate film license or unrestricted redistribution. Preserve provider controls/branding; no downloading, editing, hosting, AI processing or access charges. Subject to availability, applicable restrictions and terms. Expiry is an internal re-review deadline, not a provider license expiry.",
+      "reviewer": "Codex \u2014 user-requested curated embed review",
+      "verifiedAt": "2026-11-04T20:03:54.302Z",
+      "expiresAt": "2026-12-04T00:00:00.000Z"
+    },
+    "sceneNote": "SCENE GUIDE \u2014 Only the opening 00:00\u201300:18 tricycle following passage is selected using provider timestamps (not frame-accurate editing). The same upload later shows the twins. Its twins thumbnail is deliberately replaced by the original schematic; no replacement source is claimed.",
+    "endTime": 18
+  },
+  {
+    "id": "film-discovery-01",
+    "film": "In the Mood for Love",
+    "year": 2000,
+    "title": "In the Mood for Love",
+    "description": "Occlusion & Framing",
+    "technique": "Foreground occlusion and constrained framing",
+    "prompt": "A continuous locked-off medium shot observes a person through a narrow doorway from an adjacent room. Place the person off-center inside the visible opening, leaving a dark, softly separated doorframe close to the camera across one side of the image. Use a restrained field of view with readable corridor depth behind the subject; do not prescribe an exact focal length. Let the person move slowly within the opening while the foreground edge partially conceals a shoulder but keeps the face readable. Preserve the near-frame, subject and distant-corridor layers. No camera slide to clear the obstruction, pan, zoom, complete facial occlusion, focus pumping, abrupt movement or cuts.",
+    "sourceUrl": "https://www.youtube.com/watch?v=AfZbh4cteqI",
+    "attribution": "CRITERION / YouTube \u00b7 Three Reasons: In the Mood for Love",
+    "embedUrl": "https://www.youtube.com/embed/AfZbh4cteqI",
+    "startTime": 0,
+    "duration": 82,
+    "publicationApproved": false,
+    "review": {
+      "sceneEvidence": "Criterion\u2019s official Three Reasons montage: provider preview visibly frames a woman beside a foreground doorway edge. Actual moving-image playback confirmed in Admin and Explore on 2026-11-04. Earlier local review described a man partly concealed by a window/doorway, but its claimed 00:26 timestamp was not reproduced: the player at 00:26 showed a woman eating. Treat this as a related foreground-framing montage, not verification of the exact requested continuous corridor scene or a precise scene timestamp. No temporal camera movement, lens or rig inferred.",
+      "playbackVerified": true
+    },
+    "embedGrant": {
+      "evidence": "Conditional official-player display in FRAMEFIELD: https://www.youtube.com/static?template=terms (Permissions and Restrictions; License to Other Users), https://support.google.com/youtube/answer/171780 . Publisher provenance: https://www.criterion.com/films/198-in-the-mood-for-love . Exact source: https://www.youtube.com/watch?v=AfZbh4cteqI. Browser playback rechecked 2026-11-04. User requested attachment to public-facing prototype; no deployment. This is platform-enabled embedding, not a separate film license or unrestricted redistribution. Preserve provider controls/branding; no downloading, editing, hosting, AI processing or access charges. Subject to availability, applicable restrictions and terms. Expiry is an internal re-review deadline, not a provider license expiry.",
+      "reviewer": "Codex \u2014 user-requested curated embed review",
+      "verifiedAt": "2026-11-04T20:03:54.302Z",
+      "expiresAt": "2026-12-04T00:00:00.000Z"
+    },
+    "publicDisplayGrant": {
+      "evidence": "Conditional official-player display in FRAMEFIELD: https://www.youtube.com/static?template=terms (Permissions and Restrictions; License to Other Users), https://support.google.com/youtube/answer/171780 . Publisher provenance: https://www.criterion.com/films/198-in-the-mood-for-love . Exact source: https://www.youtube.com/watch?v=AfZbh4cteqI. Browser playback rechecked 2026-11-04. User requested attachment to public-facing prototype; no deployment. This is platform-enabled embedding, not a separate film license or unrestricted redistribution. Preserve provider controls/branding; no downloading, editing, hosting, AI processing or access charges. Subject to availability, applicable restrictions and terms. Expiry is an internal re-review deadline, not a provider license expiry.",
+      "reviewer": "Codex \u2014 user-requested curated embed review",
+      "verifiedAt": "2026-11-04T20:03:54.302Z",
+      "expiresAt": "2026-12-04T00:00:00.000Z"
+    },
+    "thumbnail": {
+      "url": "https://i.ytimg.com/vi/AfZbh4cteqI/hqdefault.jpg",
+      "displayGrant": {
+        "evidence": "Provider-supplied oEmbed thumbnail for https://www.youtube.com/watch?v=AfZbh4cteqI, refreshed 2026-11-04T20:03:54.302Z. Display only as attributed YouTube video preview leading to the official player; no local image caching, film-still reuse or redistribution. https://oembed.com/ section 2.3.4; https://developers.google.com/youtube/terms/developer-policies sections E/F; Conditional official-player display in FRAMEFIELD: https://www.youtube.com/static?template=terms (Permissions and Restrictions; License to Other Users), https://support.google.com/youtube/answer/171780 . Publisher provenance: https://www.criterion.com/films/198-in-the-mood-for-love . Exact source: https://www.youtube.com/watch?v=AfZbh4cteqI. Browser playback rechecked 2026-11-04. User requested attachment to public-facing prototype; no deployment. This is platform-enabled embedding, not a separate film license or unrestricted redistribution. Preserve provider controls/branding; no downloading, editing, hosting, AI processing or access charges. Subject to availability, applicable restrictions and terms. Expiry is an internal re-review deadline, not a provider license expiry.",
+        "reviewer": "Codex \u2014 user-requested curated embed review",
+        "verifiedAt": "2026-11-04T20:03:54.302Z",
+        "expiresAt": "2026-12-04T00:00:00.000Z"
+      }
+    },
+    "sceneNote": "SCENE GUIDE \u2014 Criterion\u2019s Three Reasons montage is a related foreground-framing reference. The exact continuous corridor/noodle-shop scene and its timestamp remain unverified, so playback starts at the beginning. The curated prompt is an authored exercise."
+  }
+]

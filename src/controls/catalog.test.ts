@@ -95,3 +95,30 @@ test('fresh evaluation dimensions and experiments never share mutable evidence a
   assert.deepEqual(second.intentFidelity.evidenceRunIds, []);
   assert.deepEqual(second.intentFidelity.notes, []);
 });
+
+test('control template retains registry values and produces honest evidence state', async () => {
+  const {toControlModels,controlComposeHref}=await import('./control-adapter');
+  const {defaults}=await import('./control-model');
+  const {pageModelFor,controlPageHTML}=await import('./control-page');
+  const {readControlMapping}=await import('../playground/control-handoff');
+  const list=toControlModels();
+  for(const [i,c] of list.entries()){
+    assert.equal(c.definition,controls[i]!.shortDescription);
+    assert.deepEqual(c.params.map(p=>p.default),controls[i]!.parameters.map(p=>p.defaultValue));
+    const model=pageModelFor(list,c.slug,{indexHref:'/index',experimentNeeds:[],composeHref:controlComposeHref})!;
+    const html=controlPageHTML(model,defaults(c));
+    assert(html.includes('No model has been run'));
+    assert(!html.includes('Model A'));
+    assert(readControlMapping(new URL(controlComposeHref(c,defaults(c)),'http://localhost').search));
+  }
+  assert.equal(pageModelFor(list,list[11]!.slug,{indexHref:'/index',experimentNeeds:[],composeHref:controlComposeHref})!.next!.href,'/library/pan');
+});
+test('control handoff validates parameters and does not invent unsupported motion',async()=>{
+ const {readControlMapping}=await import('../playground/control-handoff');
+ assert.equal(readControlMapping('?control=tilt&param-duration=8')!.controls.duration,8);
+ assert.equal(readControlMapping('?control=tilt')!.controls.movement,'static');
+ assert.equal(readControlMapping('?control=lens-85mm')!.controls.focalLength,85);
+ assert.equal(readControlMapping('?control=dolly&param-distance=1.5')!.controls.distance,1.5);
+ assert.equal(readControlMapping('?control=unknown'),null);
+ assert.equal(readControlMapping('?control=tilt&param-duration=999')!.controls.duration,5);
+});

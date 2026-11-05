@@ -145,7 +145,7 @@ export function renderPixelValue(host: HTMLElement, value: string, label?: strin
  * Inserts `.ff-focal-pix` beside the caption; returns a disposer.
  */
 export function mountFocalPixels(root: ParentNode = document): () => void {
-  const source = root.querySelector<HTMLElement>('.focal-number, .lens-value');
+  const source = root.querySelector<HTMLElement>('.focal-number') ?? root.querySelector<HTMLElement>('.lens-value');
   const caption = root.querySelector<HTMLElement>('.instrument-caption');
   if (!source || !caption) return () => {};
 
